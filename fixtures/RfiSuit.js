@@ -1,7 +1,8 @@
 ﻿import { openComparisonScreenById } from '../helpers/openComparisonScreenById.js';
+import env from '../environment.js';
 
 fixture`RFI suit`
-    .page`https://autostandard72.determine.com/t/dsim_spa/`;
+    .page(env.host);
 
 test('Open RFI comparison analysis screen', async browser => {
     await openComparisonScreenById({ id: '3511', browser });

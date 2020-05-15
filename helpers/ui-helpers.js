@@ -13,7 +13,7 @@ export const login = async ({ login, password, browser }) => {
 }
 
 export const openComparisonScreenById = async ({ id, browser }) => {
-    await login({ login: 'ynosov', password: 'qwerty77A', browser });
+    await login({ login: env.assignedTo.login, password: env.assignedTo.password, browser });
     await browser.navigateTo(''.concat(env.host, 'common/record_edit.php?rkey=RFXID&&MM_edit=0&rid=', id, '&RFXID=', id))
         .click(page.sourcingEventDetails.analysisTab)
         .click(page.sourcingEventDetails.analysisButton)

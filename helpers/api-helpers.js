@@ -24,3 +24,15 @@ export function getToken() {
             ]);
         })
 }
+
+export function 
+env.link
+    + 'webapps/t/sourcing/#access_token='
+    + (tokens.get('access_token')
+        + '&token_type=Bearer&expires_in=3600&scope=data&refresh_token='
+        + tokens.get('refresh_token')
+        + '&state=eyJhcHAiOiJzb3VyY2luZ19zcGEiLCJyb3V0ZSI6eyJya2V5IjoiUkZYSUQiLCJyaWQiOjM1MTEsImxldmVsIjoiZGV0YWlsIn19&audience=https%3A%2F%2F'
+        + env.host
+        + '%2F' + env.appli + '%2Fapi%2F'
+        + env.apitoken
+        + '%2Frestful'

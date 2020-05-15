@@ -1,5 +1,3 @@
-import { Selector } from 'testcafe';
-
 class Environment { 
 	constructor () {
 		this.host = 'https://autostandard72.determine.com/t/dsim_spa/';

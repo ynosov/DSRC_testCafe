@@ -1,4 +1,4 @@
-﻿import { openComparisonScreenById } from '../helpers/openComparisonScreenById.js';
+﻿import { openComparisonScreenById } from '../helpers/ui-helpers.js';
 import env from '../environment.js';
 
 fixture`RFI suit`

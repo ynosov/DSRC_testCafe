@@ -1,5 +1,6 @@
 ﻿import { openComparisonScreenById } from '../helpers/ui-helpers.js';
 import env from '../environment.js';
+import { getToken } from '../helpers/api-helpers';
 
 fixture`RFI suit`
     .page(env.host);

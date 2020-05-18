@@ -4,8 +4,8 @@ class Environment {
         this.host = 'autostandard72.determine.com';
         this.appli = 'dsim_spa';
         this.vrp = 't';
-        this.url = 'https://' + hostname + '/' + vrp + '/' + appli + '/';
-        this.path = '/' + vrpt + '/' + appli;
+        this.url = 'https://' + this.host + '/' + this.vrp + '/' + this.appli + '/';
+        this.path = '/' + this.vrpt + '/' + this.appli;
         this.apitoken = '55118a102daf46ab8d9fc17a42515bfb';
 
         //Users

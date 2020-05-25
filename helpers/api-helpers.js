@@ -1,7 +1,8 @@
 import env from '../environment'
-
+var querystring = require('querystring');
 const axios = require('axios')
-const querystring = require('querystring')
+var rp = require('request-promise');
+var fs = require('fs');
 
 
 export function getSession() {
@@ -33,13 +34,16 @@ export function getSession() {
                 );
             }
 
-            let session = new Map([
-                ['access_token', response.data["access_token"]],
-                ['refresh_token', response.data["refresh_token"]],
-                ['cookie', "tDTRMdsim_spa=" + cookieValue]]);
+            let session = {
+                access_token: response.data["access_token"],
+                refresh_token: response.data["refresh_token"],
+                cookie: "tDTRMdsim_spa=" + cookieValue };
 
             return session;
         })
+        .catch(error => {
+            console.log("getSession request failed: " + error.response)
+        });
 }
 
 export function getUserId(cookie) {
@@ -58,6 +62,9 @@ export function getUserId(cookie) {
 
             return userId;
         })
+        .catch(error => {
+            console.log("getUserId request failed: " + error.response)
+        });
 }
 
 export function getUserInfo(cookie, userId) {
@@ -89,6 +96,9 @@ export function getUserInfo(cookie, userId) {
   
             return userInfo;
         })
+        .catch(error => {
+            console.log("getUserInfo request failed: " + error.response)
+        });
 }
 
 
@@ -224,107 +234,103 @@ export function createRfqSourcingEvent(cookie, _token, userName, userId) {
             }
 
             return rfxDetails;
-        })
+        }).catch(error => {
+            console.log("createRfqSourcingEvent request failed: " + error.response)
+        });
 }
 
-export function apiLogin() {
+export async function startImportRfx( cookie, _token, filePath ) {
 
-    return axios({
-        method: 'post',
-        url: env.url + 'protected/login.php',
-        data: querystring.stringify({
-            user: env.assignedTo.login,
-            password: env.assignedTo.password,
-            Kick: '0',
-            UserTimeZone: 'Europe/Kiev',
-            MM_login: '1',
-            MM_ref: '1560262430',
-            MM_val: 'bce71b1b120f2cd269941ca03d5b3e29'
-        }),
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded'
+            var fileUploadParams = {
+                method: 'POST',
+                url: env.url + 'common/record_callback.php',
+                qs: {
+                  flashUpload: '1',
+                  FromVar: 'ImportFile',
+                  path: 'import/',
+                  rkey: 'IMPORT',
+                  rid: '0',
+                  Timestamp: '0'
+                },
+                headers: {
+                  'Cookie': cookie,
+                  'Content-Type': 'multipart/form-data; boundary=--------------------------676127358152040587455180'
+                },
+                formData: {
+                  'ImportFile': {
+                    'value': fs.createReadStream(filePath),
+                    'options': {
+                      'filename': filePath,
+                      'contentType': null
+                    }
+                  }
+                }
+                };
+        
+                  try {
+                  var uploadedFile = await rp(fileUploadParams)
+                  var uploadedFileName = await JSON.parse(uploadedFile).uploadFile.name
+                  return uploadedFileName }
+                  catch (error) {
+                    console.log("startImportRfx requests failed: " + error)
+                };;
+
         }
-    })
-        .then(response => {
-            return new Map([
-                ['access_token', response.data["access_token"]],
-                ['refresh_token', response.data["refresh_token"]]
-            ]);
-        })
-}
-
-export function apiOpenHomePage( rfxId, _token ) {
-
-    return axios({
-        method: 'get',
-        url: env.url + 'common/record_edit.php',
-        params: {
-            rkey: 'IMPORT',
-            ikey: 'RFXITEMID',
-            MM_edit: '1',
-            SetRFXID: rfxId,
-            _token: _token
-        },
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded'
-        }
-    })
-        .then(response => {
-            return new Map([
-                ['access_token', response.data["access_token"]],
-                ['refresh_token', response.data["refresh_token"]]
-            ]);
-        })
-}
-
-
-export function importRfq(cookie, rfxid, rfx_name, _token) {
-
-    return axios({
-        method: 'post',
-        url: env.url + 'common/record_edit.php',
-        params: {
-            Return:	'',
-            ikey:	'RFXITEMID',
-            MM_update:	'1',
-            RECORDNAME:	'',
-            rkey:	'IMPORT',
-            rid:	'0',
-            FormName:	'Edit',
-            MM_action:	'form_import',
-            MM_from:	'',
-            MM_edit:	'1',
-            focus:	'',
-            noMenu:	'0',
-            SetRFXID:	rfxid,
-            RFXID_NAME:	rfx_name,
-            IOTemplate:	'',
-            OLD_IOTemplate:	'',
-            ImportFile:	'C:\\Users\\ynosov.PROVECTUS\\Desktop\\SPA\\"Ynosov SPA AT"\\RFQ_import_generated_200_(1578224651474).xlsx',
-            Data:	'',
-            MM_separator:	';',
-            importDateFmt:	'Y-m-d',
-            ImportEncoding:	'UTF-8',
-            MM_firstline:	'1',
-            SYNCMODE:	'3',
-            IgnoreKey_CHECK:	'0',
-            NoPK_CHECK:	'0',
-            IgnoreRequired_CHECK:	'0',
-            SetStatus_CHECK:	'0',
-            _token:	_token,
-
-        },
-        headers: {
-            'Cookie': cookie,
-            'Content-type': 'application/x-www-form-urlencoded'
-        }
-    })
-        .then(response => {
-            return response.body;
-        })
-}
-
-
+        
+export async function completeImportRfq( cookie, _token, rfxid, rfx_name, uploadedFileName ) {
+        
+                var completeImportParams = {
+                    'method': 'POST',
+                    'url': env.url + 'common/record_edit.php',
+                    qs: {
+                        Return:	'',
+                        ikey:	'RFXITEMID',
+                        MM_update:	'1',
+                        RECORDNAME:	'',
+                        rkey:	'IMPORT',
+                        rid:	'0',
+                        FormName:	'Edit',
+                        MM_action:	'form_import',
+                        MM_from:	'',
+                        MM_edit:	'1',
+                        focus:	'',
+                        noMenu:	'0',
+                        SetRFXID:	rfxid,
+                        RFXID_NAME:	rfx_name,
+                        IOTemplate:	'',
+                        OLD_IOTemplate:	'',
+                        ImportFile:	uploadedFileName,
+                        Data:	'',
+                        MM_separator:	';',
+                        importDateFmt:	'Y-m-d',
+                        ImportEncoding:	"UTF-8",
+                        MM_firstline:	'1',
+                        SYNCMODE:	'3',
+                        IgnoreKey_CHECK:	'0',
+                        NoPK_CHECK:	'0',
+                        IgnoreRequired_CHECK:	'0',
+                        SetStatus_CHECK:	'0',
+                        _token:	_token },
+                    headers: {
+                      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                      'Accept-Encoding': 'gzip, deflate, br',
+                      'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
+                      'Cookie': cookie,
+                      'Content-type': 'application/x-www-form-urlencoded',
+                      'Upgrade-Insecure-Requests': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
+                      'Connection': 'keep-alive',
+                      'Host': 'autostandard72.determine.com'
+                    },
+                    form: {
+                    }
+                  };
+        
+                  try {
+                  var importResult = await rp(completeImportParams)
+                  return importResult }
+                  catch (error) {
+                    console.log("completeImportRfq requests failed: " + error)
+                }}
 
 
 

@@ -1,8 +1,10 @@
 import env from '../environment'
 var querystring = require('querystring');
 const axios = require('axios')
+var request = require('request');
 var rp = require('request-promise');
 var fs = require('fs');
+
 
 
 export function getSession() {
@@ -67,46 +69,87 @@ export function getUserId(cookie) {
         });
 }
 
-export function getUserInfo(cookie, userId) {
+export async function getUserInfo(cookie, userId) {
 
-    return axios({
+   async function getUserDepartmentData( userDepartmentId, _token, cookie ) { 
+
+       var options = {
+        'method': 'GET',
+        'url': env.url + 'common/record_edit.php?rdo=edit&rkey=DPTID&rid=' + userDepartmentId + '&_token=' + _token,
+        'headers': {
+          'Upgrade-Insecure-Requests': '1',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+          'Cookie': cookie
+        }
+      }
+
+      try {
+        var  userDepartmentData = {}
+        var userDepartmentPage = await rp(options)
+        userDepartmentData.userDepartmentId = userDepartmentId
+        userDepartmentData.userDepartmentName = await userDepartmentPage.match('"' + userDepartmentId + '":"([a-zA-Z0-9 ]*)')[1]
+        userDepartmentData.userCompanyId = await userDepartmentPage.match('rkey=COMPANYID&COMPANYID=([0-9]*)')[1]
+        userDepartmentData.userCompanyName = await userDepartmentPage.match('"Values":{"' + userDepartmentData.userCompanyId + '":"([A-Za-z0-9 ]*)')[1]
+        return userDepartmentData }
+        catch (error) {
+          console.log("getUserDepartmentName requests failed: " + error)
+      }
+
+    }
+
+    async function getUserMainData( cookie, userId ) {
+
+    var options = {
         method: 'get',
         url: env.url + 'common/record_edit.php',
         headers: {
             'Cookie': cookie,
             'Content-type': 'application/x-www-form-urlencoded'
         },
-        params: {
+        qs: {
             'rkey': 'USERID',
             'USERID': userId,
             'rid': userId
         }
-    })
-        .then(response => {
+    }
 
-            var body = response.data;
+    try {
+        var userMainData = await rp(options)
+        return userMainData }
+        catch (error) {
+          console.log("getUserMainData requests failed: " + error)
+      }
 
-            var userInfo = {
-                userId: userId,
-                userLastName: body.match('([a-zA-Z]*)","uid":"USERID_LASTNAME')[1],
-                userFirstName: body.match('([a-zA-Z]*)","uid":"USERID_FIRSTNAME')[1],
-                userName: function() { return this.userFirstName + ' ' + this.userLastName },
-                _token: body.match('"csrf-token" content="([a-zA-Z0-9]*)')[1]
-            }
-  
-            return userInfo;
-        })
-        .catch(error => {
-            console.log("getUserInfo request failed: " + error.response)
-        });
-}
+    }
 
+    var userMainData = await getUserMainData( cookie, userId )
+    
+    var userInfo = {
+        userId: userId,
+        userLastName: userMainData.match('([a-zA-Z]*)","uid":"USERID_LASTNAME')[1],
+        userFirstName: userMainData.match('([a-zA-Z]*)","uid":"USERID_FIRSTNAME')[1],
+        userName: function() { return this.userFirstName + ' ' + this.userLastName },
+        userCompanyId: userMainData.match('rkey=COMPANYID&COMPANYID=([0-9]*)')[1],
+        _token: userMainData.match('"csrf-token" content="([a-zA-Z0-9]*)')[1],
+        cookie: cookie,
+        userDepartmentId: userMainData.match('rkey=DPTID&DPTID=([0-9]*)')[1]
+        }
 
-export function createRfqSourcingEvent(cookie, _token, userName, userId) {
+    var userDepartmentData = await getUserDepartmentData( userInfo.userDepartmentId, userInfo._token, userInfo.cookie )
+    
+    userInfo.userDepartmentName = userDepartmentData.userDepartmentName
+    userInfo.userCompanyId = userDepartmentData.userCompanyId
+    userInfo.userCompanyName = userDepartmentData.userCompanyName
+        
+   return userInfo
+        }
+
+export function createRfqSourcingEvent(userInfo) {
 
 
     const date = new Date()
-    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) 
+    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: env.timeZone }) 
     const [{ value: month },,{ value: day },,{ value: year },,{ value: hour },,{ value: minute },,{ value: second }] = dateTimeFormat .formatToParts(date ) 
 
     const openingDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`
@@ -118,7 +161,7 @@ export function createRfqSourcingEvent(cookie, _token, userName, userId) {
         url: env.url + 'common/record_edit.php',
         params: { rkey: 'RFXID', MM_edit: '-1', MM_action: 'new'},
         data: querystring.stringify({
-            _token:	_token,
+            _token:	userInfo._token,
             ACCEPTDATE:	'',
             ANSWERDATE:	answerDate,
             APPROVDATE:	'',
@@ -127,8 +170,8 @@ export function createRfqSourcingEvent(cookie, _token, userName, userId) {
             AWARDERID:	'0',
             BIDACCEPTDELAY:	'0',
             BIDSTATUS:	'0',
-            BUYERID:	userId,
-            BUYERID_NAME:	userName,
+            BUYERID:	userInfo.userId,
+            BUYERID_NAME:	userInfo.userName,
             CATID:	'',
             CATID_NAME:	'',
             CCURID:	'USD',
@@ -154,8 +197,8 @@ export function createRfqSourcingEvent(cookie, _token, userName, userId) {
             INCOTERM_NAME:	'',
             INITID:	'0',
             INITID_NAME:	'',
-            INITUSERID:	userId,
-            INITUSERID_NAME:	userName,
+            INITUSERID:	userInfo.userId,
+            INITUSERID_NAME:	userInfo.userName,
             INVCOMPANYID:	'5',
             ISHELP:	'0',
             ISTATUS:	'1',
@@ -218,7 +261,7 @@ export function createRfqSourcingEvent(cookie, _token, userName, userId) {
             WORKFLOWID_WREJECTREASON_CODE:	''
         }),
         headers: {
-            'Cookie': cookie,
+            'Cookie': userInfo.cookie,
             'Content-type': 'application/x-www-form-urlencoded'
         }
     })
@@ -230,7 +273,9 @@ export function createRfqSourcingEvent(cookie, _token, userName, userId) {
                 rfxid: body.match('rkey=RFXID&RFXID=([0-9]*)')[1],
                 rfx_docnum: body.match('([A-Z0-9]*)","uid":"RFXID_DOCNUM')[1],
                 rfx_name: 'SPA_AT_RFQ_' + body.match('Sourcing Event "SPA_AT_RFQ_([0-9]*)')[1],
-                bat: body.match('&bat=([a-z0-9]*)')[1]
+                bat: body.match('&bat=([a-z0-9]*)')[1],
+                openingDate: openingDate,
+                answerDate: answerDate
             }
 
             return rfxDetails;
@@ -239,7 +284,7 @@ export function createRfqSourcingEvent(cookie, _token, userName, userId) {
         });
 }
 
-export async function startImportRfx( cookie, _token, filePath ) {
+export async function startImportRfx( userInfo, filePath ) {
 
             var fileUploadParams = {
                 method: 'POST',
@@ -253,7 +298,7 @@ export async function startImportRfx( cookie, _token, filePath ) {
                   Timestamp: '0'
                 },
                 headers: {
-                  'Cookie': cookie,
+                  'Cookie': userInfo.cookie,
                   'Content-Type': 'multipart/form-data; boundary=--------------------------676127358152040587455180'
                 },
                 formData: {
@@ -277,7 +322,7 @@ export async function startImportRfx( cookie, _token, filePath ) {
 
         }
         
-export async function completeImportRfq( cookie, _token, rfxid, rfx_name, uploadedFileName ) {
+export async function completeImportRfq( userInfo, rfxDetails, uploadedFileName ) {
         
                 var completeImportParams = {
                     'method': 'POST',
@@ -295,8 +340,8 @@ export async function completeImportRfq( cookie, _token, rfxid, rfx_name, upload
                         MM_edit:	'1',
                         focus:	'',
                         noMenu:	'0',
-                        SetRFXID:	rfxid,
-                        RFXID_NAME:	rfx_name,
+                        SetRFXID:	rfxDetails.rfxid,
+                        RFXID_NAME:	rfxDetails.rfx_name,
                         IOTemplate:	'',
                         OLD_IOTemplate:	'',
                         ImportFile:	uploadedFileName,
@@ -310,12 +355,12 @@ export async function completeImportRfq( cookie, _token, rfxid, rfx_name, upload
                         NoPK_CHECK:	'0',
                         IgnoreRequired_CHECK:	'0',
                         SetStatus_CHECK:	'0',
-                        _token:	_token },
+                        _token:	userInfo._token },
                     headers: {
                       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                       'Accept-Encoding': 'gzip, deflate, br',
                       'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
-                      'Cookie': cookie,
+                      'Cookie': userInfo.cookie,
                       'Content-type': 'application/x-www-form-urlencoded',
                       'Upgrade-Insecure-Requests': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
                       'Connection': 'keep-alive',
@@ -332,6 +377,137 @@ export async function completeImportRfq( cookie, _token, rfxid, rfx_name, upload
                     console.log("completeImportRfq requests failed: " + error)
                 }}
 
+
+export async function nextToStateSuppliers( userInfo, rfxDetails ) {
+
+    const date = new Date()
+    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: env.timeZone }) 
+    const [{ value: month },,{ value: day },,{ value: year },,{ value: hour },,{ value: minute },,{ value: second }] = dateTimeFormat .formatToParts(date ) 
+
+    const openingDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`
+    const updatingDate = openingDate
+    const answerDate = `${Number(year) + 1}-${month}-${day} ${hour}:${minute}:${second}`
+
+    var options = {
+        'method': 'POST',
+        'url': env.url + 'common/record_edit.php',
+        'headers': {
+       //   'Upgrade-Insecure-Requests': '1',
+       //  'Origin': 'https://autostandard72.determine.com',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        //  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
+        //  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+          'Cookie': userInfo.cookie
+        },
+        form: {
+          'ACCEPTDATE': '',
+          'ANSWERDATE': answerDate,
+          'APPROVDATE': '',
+          'ASENTDATE': '',
+          'AWARDDATE': '',
+          'AWARDERID': '0',
+          'BIDACCEPTDELAY': '0',
+          'BIDSTATUS': '0',
+          'BUYERID': userInfo.userId,
+          'BUYERID_NAME': userInfo.userName,
+          'CATID': '',
+          'CATID_NAME': '',
+          'CCURID': 'USD',
+          'CHANGECLOSE': '30',
+          'CLOSINGDATE': answerDate,
+          'CONFIDENTIAL': '0',
+          'COPYFROMID': '0',
+          'CURID': 'USD',
+          'CURRENTAPPROBID': '0',
+          'DAYSTOANSWERDATE': '0',
+          'DELETED': '0',
+          'DOCISTATUS': '0',
+          'DOCNUM': rfxDetails.rfx_docnum,
+          'DOCSTATUS': '',
+          'DPTID': userInfo.userDepartmentId,
+          'DPTID_NAME': userInfo.userDepartmentName,
+          'ESTIMATED_AMOUNT': '0',
+          'FLAGBIDITEMMODIF': '0',
+          'FormName': 'Edit',
+          'HIGHBID': '0',
+          'INCOTERM': '',
+          'INCOTERM_NAME': '',
+          'INITID': '0',
+          'INITID_NAME': '',
+          'INITUSERID': userInfo.userId,
+          'INITUSERID_NAME': userInfo.userName,
+          'INVCOMPANYID': userInfo.userCompanyId,
+          'ISHELP': '0',
+          'ISTATUS': '1',
+          'LASTACTIONAPPROBID': '0',
+          'LASTAPPROBID': '0',
+          'LASTAPPROVALDATE': '',
+          'LASTUPDATED': updatingDate,
+          'LINKID': '0',
+          'LOWBID': '0',
+          'MANAGERID': '0',
+          'MANAGERID_NAME': '',
+          'MINOPENING': '0',
+          'MISSINGSUPPLIERS': '0',
+          'MM_action': 'source',
+          'MM_edit': '0',
+          'MM_from': '',
+          'MODUSERID': userInfo.userId,
+          'MODUSERID_NAME': userInfo.userName,
+          'NBACCEPTED': '0',
+          'NBANSWERED': '0',
+          'NBMINSUPPLIERS': '2',
+          'NDAFILE': '',
+          'NDAFILE': '',
+          'OLD_CURID': 'USD',
+          'OLD_RFXATTR': '1096',
+          'OLD_RFXCLASS': 'RFQ',
+          'OLD_RFXTYPE': '2',
+          'OLD_SUPPLIERID': '',
+          'ONLINEDESC': '',
+          'ONLINETITLE': '',
+          'ONLINE_CHECK': '0',
+          'OPENINGDATE': openingDate,
+          'RECORDNAME': function () { return this.rfxDetails.rfx_name + ' (' + this.rfxDetails.rfx_docnum + ')' },
+          'RECORDZOOM': '0',
+          'REF_RFXID': '0',
+          'RFC_RFXCLASS': 'RFQ',
+          'RFXATTR[1024]': '1024',
+          'RFXATTR[64]': '64',
+          'RFXATTR[8]': '8',
+          'RFXATTR_CHECK': '1096',
+          'RFXCLASS': 'RFQ',
+          'RFXDESCRIPTION': '',
+          'RFXID': rfxDetails.rfxid,
+          'RFXLABEL': rfxDetails.rfx_name,
+          'RFXROUND': '0',
+          'RFXTYPE': '2',
+          'SENTDATE': '',
+          'STATUS': 'filled',
+          'SUPPLIERID': '',
+          'SUPPLIERS': '',
+          'SelectQuote': '0',
+          'UPDATEBIDSDATE': '',
+          'USTAMPDATE': updatingDate,
+          'WAPPROVER': '0',
+          '_token': userInfo._token,
+          'bat': rfxDetails.bat,
+          'focus': '',
+          'noMenu': '0',
+          'rid': rfxDetails.rfxid,
+          'rkey': 'RFXID'
+        }
+      };
+
+
+      try {
+        var seStatus = await rp(options)
+        return seStatus }
+        catch (error) {
+          console.log("nextToStateSuppliers requests failed: " + error)
+      }
+
+}
 
 
 // OPEN SPA page of sourcing event

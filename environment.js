@@ -13,6 +13,9 @@ class Environment {
 
         //Files
         this.rfqImrort200 = 'C:/Users/ynosov.PROVECTUS/Desktop/SPA/Ynosov SPA AT/RFQ_import_generated_200_(1578224651474).xlsx';
+
+        //time zone of the environment
+        this.timeZone = 'Europe/Kiev';
 	}
 }
 

@@ -6,6 +6,61 @@ var rp = require('request-promise');
 var fs = require('fs');
 
 
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+
+  export async function logIn( role ) {
+    var options = {
+        method: 'POST',
+        uri: env.url + 'protected/login.php',
+        qs: {
+            'page': '%2Ft%2F' + env.appli + '%2F'
+        },
+        headers: {
+            'Upgrade-Insecure-Requests': '1',
+            'Origin': 'https://' + env.host,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+        },
+        form: {
+            Kick: '0',
+            MM_Appli: '',
+            MM_login: '1',
+            MM_ref: '1590676267',
+            MM_val: 'e48e3de3bb9053580342cff314fc2075',
+            UserTimeZone: env.timeZone,
+            accessdenied: '',
+            password: role.password,
+            user: role.login
+        },
+        resolveWithFullResponse: true,
+        simple: false
+      };
+
+      try {
+        let response = await rp(options)
+        let setcookie   = response.headers["set-cookie"];
+        let cookieValue = '';
+
+        if (setcookie) {
+            setcookie.forEach(
+                function (cookiestr) {
+                    if (cookiestr.indexOf('tDTRMdsim_spa=') !== -1) {
+                        cookieValue = cookiestr.substring(14, cookiestr.indexOf(';'))
+                    }
+                }
+            );
+        }
+
+        return "tDTRMdsim_spa=" + cookieValue }
+        catch (error) {
+          console.log("logIn requests failed: " + error)
+      }
+  }
+
+
 
 export function getSession() {
 
@@ -149,12 +204,13 @@ export function createRfqSourcingEvent(userInfo) {
 
 
     const date = new Date()
-    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: env.timeZone }) 
+    const dateTimeFormat = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false, timeZone: env.timeZone }) 
     const [{ value: month },,{ value: day },,{ value: year },,{ value: hour },,{ value: minute },,{ value: second }] = dateTimeFormat .formatToParts(date ) 
 
     const openingDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`
     const answerDate = `${Number(year) + 1}-${month}-${day} ${hour}:${minute}:${second}`
 
+    console.log(openingDate)
 
     return axios({
         method: 'post',
@@ -380,28 +436,19 @@ export async function completeImportRfq( userInfo, rfxDetails, uploadedFileName 
 
 export async function nextToStateSuppliers( userInfo, rfxDetails ) {
 
-    const date = new Date()
-    const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: env.timeZone }) 
-    const [{ value: month },,{ value: day },,{ value: year },,{ value: hour },,{ value: minute },,{ value: second }] = dateTimeFormat .formatToParts(date ) 
-
-    const openingDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`
-    const updatingDate = openingDate
-    const answerDate = `${Number(year) + 1}-${month}-${day} ${hour}:${minute}:${second}`
-
     var options = {
         'method': 'POST',
         'url': env.url + 'common/record_edit.php',
         'headers': {
-       //   'Upgrade-Insecure-Requests': '1',
-       //  'Origin': 'https://autostandard72.determine.com',
-          'Content-Type': 'application/x-www-form-urlencoded',
-        //  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36',
-        //  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-          'Cookie': userInfo.cookie
+          'Upgrade-Insecure-Requests': '1',
+          'Origin': 'https://' + env.host,
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Cookie': userInfo.cookie,
+          'Referer': env.url + 'common/record_edit.php?rkey=RFXID&&MM_edit=0&rid=' + rfxDetails.rfxid + '&RFXID=' + rfxDetails.rfxid + '&',
         },
-        form: {
+        qs: {
           'ACCEPTDATE': '',
-          'ANSWERDATE': answerDate,
+          'ANSWERDATE': rfxDetails.answerDate,
           'APPROVDATE': '',
           'ASENTDATE': '',
           'AWARDDATE': '',
@@ -414,7 +461,7 @@ export async function nextToStateSuppliers( userInfo, rfxDetails ) {
           'CATID_NAME': '',
           'CCURID': 'USD',
           'CHANGECLOSE': '30',
-          'CLOSINGDATE': answerDate,
+          'CLOSINGDATE': rfxDetails.answerDate,
           'CONFIDENTIAL': '0',
           'COPYFROMID': '0',
           'CURID': 'USD',
@@ -442,7 +489,7 @@ export async function nextToStateSuppliers( userInfo, rfxDetails ) {
           'LASTACTIONAPPROBID': '0',
           'LASTAPPROBID': '0',
           'LASTAPPROVALDATE': '',
-          'LASTUPDATED': updatingDate,
+          'LASTUPDATED': '',
           'LINKID': '0',
           'LOWBID': '0',
           'MANAGERID': '0',
@@ -467,7 +514,7 @@ export async function nextToStateSuppliers( userInfo, rfxDetails ) {
           'ONLINEDESC': '',
           'ONLINETITLE': '',
           'ONLINE_CHECK': '0',
-          'OPENINGDATE': openingDate,
+          'OPENINGDATE': rfxDetails.openingDate,
           'RECORDNAME': function () { return this.rfxDetails.rfx_name + ' (' + this.rfxDetails.rfx_docnum + ')' },
           'RECORDZOOM': '0',
           'REF_RFXID': '0',
@@ -488,7 +535,7 @@ export async function nextToStateSuppliers( userInfo, rfxDetails ) {
           'SUPPLIERS': '',
           'SelectQuote': '0',
           'UPDATEBIDSDATE': '',
-          'USTAMPDATE': updatingDate,
+          'USTAMPDATE': '',
           'WAPPROVER': '0',
           '_token': userInfo._token,
           'bat': rfxDetails.bat,

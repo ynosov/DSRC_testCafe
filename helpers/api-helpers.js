@@ -47,14 +47,14 @@ export function sleep(ms) {
         if (setcookie) {
             setcookie.forEach(
                 function (cookiestr) {
-                    if (cookiestr.indexOf('tDTRMdsim_spa=') !== -1) {
-                        cookieValue = cookiestr.substring(14, cookiestr.indexOf(';'))
+                    if (cookiestr.indexOf(env.vrp + 'DTRM' + env.appli + '=') !== -1) {
+                        cookieValue = cookiestr.substring(5 + env.vrp.length + env.appli.length, cookiestr.indexOf(';'))
                     }
                 }
             );
         }
 
-        return "tDTRMdsim_spa=" + cookieValue }
+        return env.vrp + 'DTRM' + env.appli + '=' + cookieValue }
         catch (error) {
           console.log("logIn requests failed: " + error)
       }
@@ -84,7 +84,7 @@ export function getSession() {
             if (setcookie) {
                 setcookie.forEach(
                     function (cookiestr) {
-                        if (cookiestr.indexOf('tDTRMdsim_spa=') !== -1) {
+                        if (cookiestr.indexOf(env.vrp + 'DTRM' + env.appli + '=') !== -1) {
                             cookieValue = cookiestr.substring(14, cookiestr.indexOf(';'))
                         }
                     }
@@ -329,6 +329,144 @@ export function createRfqSourcingEvent(userInfo) {
                 rfxid: body.match('rkey=RFXID&RFXID=([0-9]*)')[1],
                 rfx_docnum: body.match('([A-Z0-9]*)","uid":"RFXID_DOCNUM')[1],
                 rfx_name: 'SPA_AT_RFQ_' + body.match('Sourcing Event "SPA_AT_RFQ_([0-9]*)')[1],
+                bat: body.match('&bat=([a-z0-9]*)')[1],
+                openingDate: openingDate,
+                answerDate: answerDate
+            }
+
+            return rfxDetails;
+        }).catch(error => {
+            console.log("createRfqSourcingEvent request failed: " + error.response)
+        });
+}
+
+export function createRfpSourcingEvent(userInfo) {
+
+
+    const date = new Date()
+    const dateTimeFormat = new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false, timeZone: env.timeZone }) 
+    const [{ value: month },,{ value: day },,{ value: year },,{ value: hour },,{ value: minute },,{ value: second }] = dateTimeFormat .formatToParts(date ) 
+
+    const openingDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`
+    const answerDate = `${Number(year) + 1}-${month}-${day} ${hour}:${minute}:${second}`
+
+    return axios({
+        method: 'post',
+        url: env.url + 'common/record_edit.php',
+        params: { rkey: 'RFXID', MM_edit: '-1', MM_action: 'new'},
+        data: querystring.stringify({
+            _token:	userInfo._token,
+            ACCEPTDATE:	'',
+            ANSWERDATE:	answerDate,
+            APPROVDATE:	'',
+            ASENTDATE:	'',
+            AWARDDATE:	'',
+            AWARDERID:	'0',
+            BIDACCEPTDELAY:	'0',
+            BIDSTATUS:	'0',
+            BUYERID:	userInfo.userId,
+            BUYERID_NAME:	userInfo.userName,
+            CATID:	'',
+            CATID_NAME:	'',
+            CCURID:	'USD',
+            CHANGECLOSE:	'30',
+            CLOSINGDATE:	answerDate,
+            CONFIDENTIAL:	'0',
+            COPYFROMID:	'0',
+            CURID:	'USD',
+            CURRENTAPPROBID:	'0',
+            DAYSTOANSWERDATE:	'0',
+            DELETED:	'0',
+            DOCISTATUS:	'0',
+            DOCNUM:	'',
+            DOCSTATUS:	'',
+            DPTID:	userInfo.userDepartmentId,
+            DPTID_NAME:	userInfo.userDepartmentName,
+            ESTIMATED_AMOUNT:	'0',
+            FLAGBIDITEMMODIF:	'',
+            focus:	'RFXBLOC',
+            FormName:	'Edit',
+            HIGHBID:	'0',
+            INCOTERM:	'',
+            INCOTERM_NAME:	'',
+            INITID:	'0',
+            INITID_NAME:	'',
+            INITUSERID:	userInfo.userId,
+            INITUSERID_NAME:	userInfo.userName,
+            INVCOMPANYID:	userInfo.userCompanyId,
+            ISHELP:	'0',
+            ISTATUS:	'1',
+            LASTACTIONAPPROBID:	'0',
+            LASTAPPROBID:	'0',
+            LASTAPPROVALDATE:	'',
+            LASTUPDATED:	'',
+            LINKID:	'0',
+            LOWBID:	'0',
+            MANAGERID:	'0',
+            MANAGERID_NAME:	'',
+            MINOPENING:	'0',
+            MISSINGSUPPLIERS:	'0',
+            MM_action:	'add',
+            MM_edit:	'-1',
+            MM_from:	'',
+            MODUSERID:	'0',
+            NBACCEPTED:	'0',
+            NBANSWERED:	'0',
+            NBMINSUPPLIERS:	'2',
+            NDAFILE:	'',
+            NDAFILE:	'',
+            noMenu:	'0',
+            OLD_CURID:	'USD',
+            OLD_RFXATTR:	'',
+            OLD_RFXCLASS:	'RFP',
+            OLD_RFXTYPE:	'3',
+            OLD_SUPPLIERID:	'',
+            ONLINE_CHECK:	'',
+            ONLINEDESC:	'',
+            ONLINETITLE:	'',
+            OPENINGDATE:	openingDate,
+            RECORDNAME:	'',
+            RECORDZOOM:	'0',
+            REF_RFXID:	'0',
+            'RFXATTR[1024]':	'1024',
+            'RFXATTR[64]':	'64',
+            'RFXATTR[8]':	'8',
+            RFXATTR_CHECK:	'1096',
+            RFXCLASS:	'RFP',
+            RFXCLASS_NAME:	'RFP',
+            RFXDESCRIPTION:	'',
+            RFXID:	'0',
+            RFXLABEL:	'SPA_AT_RFP_' + Math.random().toString().slice(2, 11),
+            RFXROUND:	'0',
+            RFXTYPE:	'3',
+            rid:	'0',
+            rkey:	'RFXID',
+            SelectQuote:	'0',
+            SENTDATE:	'',
+            STATUS:	'filled',
+            SUPPLIERID:	'',
+            SUPPLIERS:	'',
+            UPDATEBIDSDATE:	'',
+            USTAMPDATE:	'',
+            WAPPROVER:	'0',
+            WORKFLOWID_FromContext:	'',
+            WORKFLOWID_WCOMMENTS:	'',
+            WORKFLOWID_WORKFLOWID:	'0',
+            WORKFLOWID_WREJECTREASON_CODE:	''
+        }),
+        headers: {
+            'Cookie': userInfo.cookie,
+            'Content-type': 'application/x-www-form-urlencoded'
+        }
+    })
+        .then(response => {
+
+            let body = response.data;
+
+            let rfxDetails = {
+                rfxid: body.match('rkey=RFXID&RFXID=([0-9]*)')[1],
+                rfx_docnum: body.match('([A-Z0-9]*)","uid":"RFXID_DOCNUM')[1],
+                rfx_name: 'SPA_AT_RFP_' + body.match('Sourcing Event "SPA_AT_RFP_([0-9]*)')[1],
                 bat: body.match('&bat=([a-z0-9]*)')[1],
                 openingDate: openingDate,
                 answerDate: answerDate

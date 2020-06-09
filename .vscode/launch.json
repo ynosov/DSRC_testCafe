@@ -12,7 +12,8 @@
             "program": "${workspaceFolder}/../node_modules/testcafe/bin/testcafe.js",
             "args": [
                 "chrome",
-                "./fixtures/RfpSuit.js"
+                "./fixtures/RfpSuit.js",
+             //   "--inspect --debug-brk"
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"

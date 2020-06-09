@@ -1,10 +1,12 @@
 import { Selector } from 'testcafe';
+import XPathSelector from './selectors/xpath-selector';
 import env from './environment';
 
 class Page { 
 	constructor () {
 		this.login = new Login();
 		this.sourcingEventDetails = new SourcingEventDetails();
+		this.pricingMatrix = new PricingMatrix();
 		this.topPanel = new TopPanel();
 	}
 }
@@ -22,9 +24,11 @@ class Login {
 class SourcingEventDetails {
 	constructor () {
 		this.getPageById = id => { return ''.concat(env.url, 'common/record_edit.php?rkey=RFXID&&MM_edit=0&rid=', id, '&RFXID=', id)};
+		this.title = Selector('title');
 		this.analysisButton = Selector(() => { return document.getElementsByName('form_sourcing_spa')});
 		this.analysisTab	= Selector('#COMPARISONBLOC');
 		this.rfxDetailsTab  = Selector('#RFX_DETAILS_BLOC');
+		this.descriptionTab  = Selector('#RFXBLOC');
 		this.pricingMatrixButton = Selector(() => { return document.getElementsByName('form_pricing_matrix')});
 		this.questionsButton = Selector(() => { return document.getElementsByName('form_questions')});
 		this.questionnaireButton = Selector(() => { return document.getElementsByName('form_questionnaires')});
@@ -38,4 +42,10 @@ class TopPanel {
 	}
 }
 
+class PricingMatrix {
+	constructor() {
+		this.eventActions = XPathSelector('//button[@title="Event actions"]');
+		this.backToEvent = XPathSelector('//div[contains(text(), "Back to event")]');
+	}
+}
 export default new Page();

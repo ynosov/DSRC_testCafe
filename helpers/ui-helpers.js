@@ -1,7 +1,7 @@
-﻿import { ClientFunction, Selector } from 'testcafe';
-import page from '../page-model.js';
-import env from '../environment.js';
-import { browser } from 'testcafe';
+﻿import { ClientFunction, Selector, browser } from 'testcafe';
+import page from '../page-model';
+import env from '../environment';
+import { sleep } from '../helpers/api-helpers';
 
 let getLocation = ClientFunction(() => document.location.href);
 
@@ -37,3 +37,13 @@ export const openSourcingEventRfxDetailsById = async ({ id, browser }) => {
     } catch (e) { console.log('Opening Sourcing Event => RFX DETAILS tab: failed. Error: ' (e))}
     }
 
+export async function waitSpaPageToLoad () {
+    for ( let i = 0; i <= 10; i++ ) {
+        try {
+           if ( await bowser.expect( page.pricingMatrix.eventActions.exists ).ok('Check that "Event actions" menu item exists') ) {
+             break; 
+         }} catch (e) {
+             await sleep(5000);
+             continue;
+         }};
+}

@@ -1,8 +1,8 @@
 {
-    "debugMode": true,
+  //  "debugMode": true,
     "debugOnFail": true,
     "filter": {
-        "test": "Check Pricing matrix - Back to event button"
+        "test": "Check default Pricing Matrix columns set"
     },
     "pageLoadTimeout": 10000
 }

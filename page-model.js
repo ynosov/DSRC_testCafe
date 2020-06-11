@@ -46,6 +46,30 @@ class PricingMatrix {
 	constructor() {
 		this.eventActions = XPathSelector('//button[@title="Event actions"]');
 		this.backToEvent = XPathSelector('//div[contains(text(), "Back to event")]');
+		this.DefaultPricingMatrixColumnsList = [
+            new PricingMatrixColumn('Line Item', false ),
+            new PricingMatrixColumn('Unit of measure', false),
+			new PricingMatrixColumn('Quantity', false ),
+			new PricingMatrixColumn('Baseline price', true ),
+			new PricingMatrixColumn('Unit price', false ),
+			new PricingMatrixColumn('Currency', false ),
+			new PricingMatrixColumn('Commodity', false ),
+			new PricingMatrixColumn('Extended baseline price', true ),
+			new PricingMatrixColumn('Extended unit price', true ),
+			new PricingMatrixColumn('Savings', true )
+		];
+			this.allPricingMatrixColumns = Selector('span').withAttribute('class', 'single-column-wrapper');
 	}
 }
+
+	class PricingMatrixColumn {
+		constructor ( columnName, removable ) {
+			this.columnName = columnName;
+			this.header    = XPathSelector('//span[@class="single-column-wrapper"]//span[contains(text(), "' + columnName + '")]');
+			this.removable = removable;
+			this.removeButton = this.header.find('button');
+		}
+	}
+
+
 export default new Page();

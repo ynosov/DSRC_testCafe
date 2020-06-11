@@ -1,0 +1,8 @@
+{
+    "debugMode": true,
+    "debugOnFail": true,
+    "filter": {
+        "test": "Check Pricing matrix - Back to event button"
+    },
+    "pageLoadTimeout": 10000
+}

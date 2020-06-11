@@ -1,7 +1,7 @@
 ﻿import page from '../page-model';
 import env from '../environment';
 import { logIn, getUserId, getUserInfo, createRfpSourcingEvent } from '../helpers/api-helpers';
-import { waitSpaPageToLoad } from '../helpers/ui-helpers';
+import { waitPricingMatrixPageToLoad } from '../helpers/ui-helpers';
 import { assignedTo } from '../roles';
 
 
@@ -9,8 +9,14 @@ fixture`RFP Sourcing event`
 .page(env.url)
     .before( async ctx => {
 
-        ctx.sv = {};
-        try{
+        ctx.sv = {
+            rfxDetails: {
+                rfxid: '3296',
+                rfx_name: 'SPA_AT_RFP_348099436',
+                rfx_docnum: 'DSE20203305'
+            }
+        };
+        /*try{
             await logIn( env.assignedTo ).then( cookie => ctx.sv.cookie = cookie);
             await getUserId( ctx.sv.cookie ).then( userId => ctx.sv.userId = userId);
             await getUserInfo( ctx.sv.cookie, ctx.sv.userId ).then( userInfo => ctx.sv.userInfo = userInfo);
@@ -18,12 +24,12 @@ fixture`RFP Sourcing event`
             console.log( 'Preconditions done:' + ctx.sv.rfxDetails.rfx_name + ' is created' );
             } catch (e) {
                 console.error('Preconditions failed:' + e);
-            }
+            }*/
 
     });
 
 
-test('Check buttons set on "Rfx details" tab', async browser => {
+test('Check buttons set on Rfx details tab', async browser => {
     
     const sv = browser.fixtureCtx.sv;
 
@@ -38,7 +44,7 @@ test('Check buttons set on "Rfx details" tab', async browser => {
 });
 
 
-test('Check "Pricing matrix": "Back to event" button', async browser => {
+test('Check Pricing matrix - Back to event button', async browser => {
     
     const sv = browser.fixtureCtx.sv;
 
@@ -47,8 +53,9 @@ test('Check "Pricing matrix": "Back to event" button', async browser => {
     .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
     .click( page.sourcingEventDetails.rfxDetailsTab )
     .click( page.sourcingEventDetails.pricingMatrixButton );
-    waitSpaPageToLoad();
+    await waitPricingMatrixPageToLoad();
     await browser
+    .expect( page.pricingMatrix.eventActions.exists ).ok('Check that "Event actions" menu item exists' )
     .click( page.pricingMatrix.eventActions )
     .expect( page.pricingMatrix.backToEvent.exists ).ok( 'Check that "Back to event" menu item exists' )
     .click( page.pricingMatrix.backToEvent )

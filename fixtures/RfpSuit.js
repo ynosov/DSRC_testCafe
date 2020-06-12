@@ -37,9 +37,9 @@ test('Check buttons set on Rfx details tab', async browser => {
     .useRole(assignedTo)
     .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
     .click( page.sourcingEventDetails.rfxDetailsTab )
-    .expect( page.sourcingEventDetails.pricingMatrixButton.exists ).ok('Check that "Pricing matrix" button exists')
-    .expect( page.sourcingEventDetails.questionsButton.exists ).ok('Check that "Questions" button exists')
-    .expect( page.sourcingEventDetails.questionnaireButton.exists ).ok('Check that "Questionnaire" button exists');
+    .expect( page.sourcingEventDetails.pricingMatrixButton.exists ).ok('"Pricing matrix" button doesnt exist')
+    .expect( page.sourcingEventDetails.questionsButton.exists ).ok('"Questions" button doesnt exist')
+    .expect( page.sourcingEventDetails.questionnaireButton.exists ).ok('"Questionnaire" button doesnt exist');
 
 });
 
@@ -55,12 +55,12 @@ test('Check Pricing matrix - Back to event button', async browser => {
     .click( page.sourcingEventDetails.pricingMatrixButton );
     await waitPricingMatrixPageToLoad();
     await browser
-    .expect( page.pricingMatrix.eventActions.exists ).ok('Check that "Event actions" menu item exists' )
+    .expect( page.pricingMatrix.eventActions.exists ).ok('"Event actions" menu item doesnt exist' )
     .click( page.pricingMatrix.eventActions )
-    .expect( page.pricingMatrix.backToEvent.exists ).ok( 'Check that "Back to event" menu item exists' )
+    .expect( page.pricingMatrix.backToEvent.exists ).ok( '"Back to event" menu item doesnt exist' )
     .click( page.pricingMatrix.backToEvent )
-    .expect( page.sourcingEventDetails.title.innerText ).eql( 'Sourcing Event "' + sv.rfxDetails.rfx_name + ' (' + sv.rfxDetails.rfx_docnum + ')"', 'Check title of the page' )
-    .expect( page.sourcingEventDetails.descriptionTab.exists ).ok( 'Check that redirection to "Description" tab works' );
+    .expect( page.sourcingEventDetails.title.innerText ).eql( 'Sourcing Event "' + sv.rfxDetails.rfx_name + ' (' + sv.rfxDetails.rfx_docnum + ')"', 'Incorrect title of the Sourcing Details page' )
+    .expect( page.sourcingEventDetails.descriptionTab.exists ).ok( 'Redirection to "Description" tab doesnt work' );
 
 });
 
@@ -78,7 +78,7 @@ test('Check default Pricing Matrix columns set', async browser => {
     // Check that all Default columns are displayed in Arrange columns section
     for (const column of page.pricingMatrix.DefaultPricingMatrixColumnsList) {
         await browser
-            .expect(column.header.exists).ok(column.columnName + ' is absent in "Arrange columns" section');
+            .expect(column.header.exists).ok('"' + column.columnName + '"' + ' is absent in "Arrange columns" section');
     }
     // Check that there is no odd columns in Arrange columns section
     await browser
@@ -100,11 +100,11 @@ test('Check which default Pricing Matrix columns can be removed', async browser 
     for (const column of page.pricingMatrix.DefaultPricingMatrixColumnsList) {
         if ( column.removable == true ) {
             await browser
-                .expect(column.removeButton.exists).ok(column.columnName + ' from "Arrange columns" section has no "Remove" button');
+                .expect(column.removeButton.exists).ok('"' + column.columnName + '"' + ' from "Arrange columns" section has no "Remove" button');
         } else if ( column.removable == false ) {
             await browser
-                .expect(column.removeButton.exists).notOk(column.columnName + ' from "Arrange columns" section has "Remove" button');
-        } else throw new Error(column.columnName + ' has no properly defined "removable" parameter in page-model');
+                .expect(column.removeButton.exists).notOk('"' + column.columnName + '"' + ' from "Arrange columns" section has "Remove" button');
+        } else throw new Error('"' + column.columnName + '"' + ' has no properly defined "removable" parameter in page-model');
     }
 
 });

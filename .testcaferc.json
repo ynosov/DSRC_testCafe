@@ -1,8 +1,12 @@
 {
   //  "debugMode": true,
     "debugOnFail": true,
-    "filter": {
+  /*  "filter": {
         "test": "Check default Pricing Matrix columns set"
-    },
-    "pageLoadTimeout": 10000
+    },*/
+    "pageLoadTimeout": 10000,
+    "reporter": {
+      "name": "html",
+      "output": "reports/report.html"
+  }
 }

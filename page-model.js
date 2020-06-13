@@ -46,30 +46,231 @@ class PricingMatrix {
 	constructor() {
 		this.eventActions = XPathSelector('//button[@title="Event actions"]');
 		this.backToEvent = XPathSelector('//div[contains(text(), "Back to event")]');
-		this.DefaultPricingMatrixColumnsList = [
-            new PricingMatrixColumn('Line Item', false ),
-            new PricingMatrixColumn('Unit of measure', false),
-			new PricingMatrixColumn('Quantity', false ),
-			new PricingMatrixColumn('Baseline price', true ),
-			new PricingMatrixColumn('Unit price', false ),
-			new PricingMatrixColumn('Currency', false ),
-			new PricingMatrixColumn('Commodity', false ),
-			new PricingMatrixColumn('Extended baseline price', true ),
-			new PricingMatrixColumn('Extended unit price', true ),
-			new PricingMatrixColumn('Savings', true )
+		this.defaultColumnsList = [
+			new Column( 'Line Item', false,
+				new FieldAttributes(
+	                //                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Line Item' ),
+					new FieldAttributeText(   'Char limit',    true,      true,       '255' ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      false ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      false )
+			) ),
+			new Column( 'Unit of measure', false,
+				new FieldAttributes(
+	                //                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Unit of measure' ),
+					new FieldAttributeText(   'Char limit',    true,      true,       '255' ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      false ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      false )
+			)),
+			new Column( 'Quantity', false,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Quantity' ),
+					new FieldAttributeText(   'Char limit',    true,      true,       '15'  ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      false ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      false )
+			)),
+			new Column( 'Baseline price', true,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Baseline price' ),
+					new FieldAttributeText(   'Char limit',    true,      true,       '15'  ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      false ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      false )
+			)),
+			new Column( 'Unit price', false,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Unit price' ),
+					new FieldAttributeText(   'Char limit',    true,      true,       '15'  ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      false ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      false ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      false )
+			)),
+			new Column( 'Currency', false,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Currency' ),
+					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      false ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      false )
+			)),
+			new Column( 'Commodity', false,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Commodity' ),
+					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      false ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      false )
+			)),
+			new Column( 'Extended baseline price', true,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Extended baseline price' ),
+					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      false ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      true  )
+			)),
+			new Column( 'Extended unit price', true,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Extended unit price' ),
+					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      false ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      true  )
+			)),
+			new Column( 'Savings', true,
+				new FieldAttributes(
+					//                         Label           Editable   Required    Text/Active
+					new FieldAttributeText(   'Field header',  false,     true,       'Savings' ),
+					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
+					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Currency',      false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Percent',       false,     false,      false ),
+					new FieldAttributeCheckbox( 'Internal only', false,     false,      true  ),
+					new FieldAttributeCheckbox( 'Read only',     false,     false,      false ),
+					new FieldAttributeCheckbox( 'Response',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Required',      false,     false,      false ),
+					new FieldAttributeCheckbox( 'Calculation',   false,     false,      true  )
+			))
 		];
-			this.allPricingMatrixColumns = Selector('span').withAttribute('class', 'single-column-wrapper');
+			this.allColumns = Selector('span').withAttribute('class', 'single-column-wrapper');
 	}
 }
 
-	class PricingMatrixColumn {
-		constructor ( columnName, removable ) {
+	class Column {
+		constructor ( columnName, isRemovable, fieldAttributes ) {
 			this.columnName = columnName;
-			this.header    = XPathSelector('//span[@class="single-column-wrapper"]//span[contains(text(), "' + columnName + '")]');
-			this.removable = removable;
-			this.removeButton = this.header.find('button');
+			this.locator    = XPathSelector('//span[@class="single-column-wrapper"]//span[contains(text(), "' + columnName + '")]');
+			this.isRemovable = isRemovable;
+			this.removeButton = this.locator.find('button');
+			this.fieldAttributes = fieldAttributes;
 		}
 	}
 
+	class FieldAttributes {
+		constructor (
+			fieldHeader,
+			charLimit,
+			attachment,
+			date,
+			number,
+			currency,
+			percent,
+			internalOnly,
+			readOnly,
+			response,
+			required,
+			calculation
+			 ) {
+		this.fieldHeader = fieldHeader;
+		this.charLimit = charLimit;
+		this.attachment = attachment;
+		this.date = date;
+		this.number = number;
+		this.currency = currency;
+		this.percent = percent;
+		this.internalOnly - internalOnly;
+		this.readOnly = readOnly;
+		this.response = response;
+		this.required = required;
+		this.calculation = calculation;
+	}
+}
+
+
+    class FieldAttributeText {
+		constructor ( label, isEditable, isRequired, text ) {
+			this.label = label;
+			this.isEditable = isEditable;
+			this.isRequired = isRequired;
+			this.text = text;
+			this.textField = Selector('span').withText(label).parent('div.v-text-field__slot').find('input');
+		}
+	}
+
+	class FieldAttributeCheckbox {
+		constructor ( label, isEditable, hasTooltip, isActive ) {
+			this.label = label;
+			this.isEditable = isEditable;
+			this.hasTooltip = hasTooltip;
+			this.isActive = isActive;
+			this.checkbox = Selector('span').withText(label).parent('div.v-input--selection-controls__input').find('input');
+		}
+	}
 
 export default new Page();

@@ -3,6 +3,7 @@ import env from '../environment';
 import { logIn, getUserId, getUserInfo, createRfpSourcingEvent } from '../helpers/api-helpers';
 import { waitPricingMatrixPageToLoad } from '../helpers/ui-helpers';
 import { assignedTo } from '../roles';
+import { debug } from 'request-promise';
 
 
 fixture`RFP Sourcing event`
@@ -76,13 +77,13 @@ test('Check default Pricing Matrix columns set', async browser => {
     .click( page.sourcingEventDetails.pricingMatrixButton );
     await waitPricingMatrixPageToLoad();
     // Check that all Default columns are displayed in Arrange columns section
-    for (const column of page.pricingMatrix.DefaultPricingMatrixColumnsList) {
+    for (const column of page.pricingMatrix.defaultColumnsList) {
         await browser
-            .expect(column.header.exists).ok('"' + column.columnName + '"' + ' is absent in "Arrange columns" section');
+            .expect(column.locator.exists).ok('"' + column.columnName + '"' + ' is absent in "Arrange columns" section');
     }
     // Check that there is no odd columns in Arrange columns section
     await browser
-    .expect(page.pricingMatrix.allPricingMatrixColumns.count).eql(page.pricingMatrix.DefaultPricingMatrixColumnsList.length, 'There are odd columns in "Arrange columns" section');
+    .expect(page.pricingMatrix.allColumns.count).eql(page.pricingMatrix.defaultColumnsList.length, 'There are odd columns in "Arrange columns" section');
    
 });
 
@@ -97,14 +98,41 @@ test('Check which default Pricing Matrix columns can be removed', async browser 
     .click( page.sourcingEventDetails.rfxDetailsTab )
     .click( page.sourcingEventDetails.pricingMatrixButton );
     await waitPricingMatrixPageToLoad();
-    for (const column of page.pricingMatrix.DefaultPricingMatrixColumnsList) {
-        if ( column.removable == true ) {
+    for (const column of page.pricingMatrix.defaultColumnsList) {
+        if ( column.isRemovable == true ) {
             await browser
                 .expect(column.removeButton.exists).ok('"' + column.columnName + '"' + ' from "Arrange columns" section has no "Remove" button');
-        } else if ( column.removable == false ) {
+        } else if ( column.isRemovable == false ) {
             await browser
                 .expect(column.removeButton.exists).notOk('"' + column.columnName + '"' + ' from "Arrange columns" section has "Remove" button');
-        } else throw new Error('"' + column.columnName + '"' + ' has no properly defined "removable" parameter in page-model');
+        } else throw new Error('"' + column.columnName + '"' + ' has no properly defined "isRemovable" parameter in page-model');
     }
 
+});
+
+
+test('Check field attributes of Default columns', async browser => {
+    
+    const sv = browser.fixtureCtx.sv;
+
+    await browser
+    .useRole(assignedTo)
+    .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
+    .click( page.sourcingEventDetails.rfxDetailsTab )
+    .click( page.sourcingEventDetails.pricingMatrixButton );
+    await waitPricingMatrixPageToLoad();
+    for ( const column of page.pricingMatrix.defaultColumnsList ) {
+        //CHECK "FIELD HEADER" ATTRIBUTE
+    await browser
+        .click( column.locator )
+        //Check text
+        .expect( column.fieldAttributes.fieldHeader.textField.value ).eql( column.fieldAttributes.fieldHeader.text );
+        //Check that the field is not editable for specific columns
+        if ( column.fieldAttributes.fieldHeader.isEditable == false ) {
+        await browser.expect( column.fieldAttributes.fieldHeader.textField.hasAttribute('disabled') ).ok( '"' + column.columnName + '" column attribute "' + column.fieldAttributes.fieldHeader.label + '" is editable' )
+        //Check that the field is editable for specific columns
+    } else if ( column.fieldAttributes.fieldHeader.isEditable == true ) {
+        await browser.expect( column.fieldAttributes.fieldHeader.textField.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + column.fieldAttributes.fieldHeader.label + '" is not editable' )
+    } else throw new Error('"' + column.columnName + '" column attribute "' + column.fieldAttributes.fieldHeader.label + '" is not defined in test case' )
+    }
 });

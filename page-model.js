@@ -237,23 +237,24 @@ class PricingMatrix {
 			required,
 			calculation
 			 ) {
-		this.fieldHeader = fieldHeader;
-		this.charLimit = charLimit;
-		this.attachment = attachment;
-		this.date = date;
-		this.number = number;
-		this.currency = currency;
-		this.percent = percent;
-		this.internalOnly - internalOnly;
-		this.readOnly = readOnly;
-		this.response = response;
-		this.required = required;
-		this.calculation = calculation;
+		this.list = {
+			fieldHeader:	fieldHeader, 
+			charLimit: 		charLimit, 
+			attachment: 	attachment, 
+			date: 			date, 
+			number:			number, 
+			currency: 		currency, 
+			percent: 		percent, 
+			internalOnly: 	internalOnly, 
+			readOnly: 		readOnly, 
+			response: 		response, 
+			required: 		required, 
+			calculation:	calculation }
 	}
 }
 
 
-    class FieldAttributeText {
+    export class FieldAttributeText {
 		constructor ( label, isEditable, isRequired, text ) {
 			this.label = label;
 			this.isEditable = isEditable;
@@ -263,7 +264,7 @@ class PricingMatrix {
 		}
 	}
 
-	class FieldAttributeCheckbox {
+	export class FieldAttributeCheckbox {
 		constructor ( label, isEditable, hasTooltip, isActive ) {
 			this.label = label;
 			this.isEditable = isEditable;

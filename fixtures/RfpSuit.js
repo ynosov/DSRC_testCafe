@@ -1,9 +1,11 @@
 ﻿import page from '../page-model';
+import { FieldAttributeText, FieldAttributeCheckbox } from '../page-model';
 import env from '../environment';
 import { logIn, getUserId, getUserInfo, createRfpSourcingEvent } from '../helpers/api-helpers';
 import { waitPricingMatrixPageToLoad } from '../helpers/ui-helpers';
 import { assignedTo } from '../roles';
 import { debug } from 'request-promise';
+
 
 
 fixture`RFP Sourcing event`
@@ -111,7 +113,7 @@ test('Check which default Pricing Matrix columns can be removed', async browser 
 });
 
 
-test('Check field attributes of Default columns', async browser => {
+test('Check values and editing state for Field attributes of Default columns', async browser => {
     
     const sv = browser.fixtureCtx.sv;
 
@@ -121,18 +123,50 @@ test('Check field attributes of Default columns', async browser => {
     .click( page.sourcingEventDetails.rfxDetailsTab )
     .click( page.sourcingEventDetails.pricingMatrixButton );
     await waitPricingMatrixPageToLoad();
+
     for ( const column of page.pricingMatrix.defaultColumnsList ) {
-        //CHECK "FIELD HEADER" ATTRIBUTE
-    await browser
-        .click( column.locator )
-        //Check text
-        .expect( column.fieldAttributes.fieldHeader.textField.value ).eql( column.fieldAttributes.fieldHeader.text );
-        //Check that the field is not editable for specific columns
-        if ( column.fieldAttributes.fieldHeader.isEditable == false ) {
-        await browser.expect( column.fieldAttributes.fieldHeader.textField.hasAttribute('disabled') ).ok( '"' + column.columnName + '" column attribute "' + column.fieldAttributes.fieldHeader.label + '" is editable' )
-        //Check that the field is editable for specific columns
-    } else if ( column.fieldAttributes.fieldHeader.isEditable == true ) {
-        await browser.expect( column.fieldAttributes.fieldHeader.textField.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + column.fieldAttributes.fieldHeader.label + '" is not editable' )
-    } else throw new Error('"' + column.columnName + '" column attribute "' + column.fieldAttributes.fieldHeader.label + '" is not defined in test case' )
+
+        await browser
+        .click( column.locator );
+
+        for ( const attribute of Object.keys(column.fieldAttributes.list) ) {
+            let attributeDetails = column.fieldAttributes.list[attribute];
+
+            //Check text attributes
+            if ( attributeDetails instanceof FieldAttributeText ) {
+                //Check text attributes values
+                await browser
+                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" text doesnt correspond to defined in test data' );
+                //Check that the attribute is not editable for specific columns
+                if ( attributeDetails.isEditable == false ) {
+                    await browser
+                    .expect( attributeDetails.textField.hasAttribute( 'disabled' ) )
+                    .ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
+                //Check that the attribute is editable for specific columns
+                } else if ( attributeDetails.isEditable == true ) {
+                    await browser.expect( attributeDetails.textField.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' )
+                } else throw new Error('"' + column.columnName + '" column attribute "' + attributeDetails.label + '" editable state is not defined in test case' )
+            
+            //Check checkbox attributes    
+            } else if ( attributeDetails instanceof FieldAttributeCheckbox ) {
+                //Check checkbox state
+                if ( attributeDetails.isActive == false ) {
+                    await browser
+                    .expect( attributeDetails.checkbox.getAttribute('aria-checked') ).eql( 'false', '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is active' );
+                } else if ( attributeDetails.isActive == true ) {
+                    await browser
+                    .expect( attributeDetails.checkbox.getAttribute('aria-checked') ).eql( 'true', '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not active' );
+                } else throw new Error( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" has not correctly defined checkbox state in test case' );
+               //Check that the attribute is not editable for specific columns
+               if ( attributeDetails.isEditable == false ) {
+                await browser
+                .expect( attributeDetails.checkbox.hasAttribute( 'disabled' ) )
+                .ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
+                //Check that the field is editable for specific columns
+                } else if ( attributeDetails.isEditable == true ) {
+                    await browser.expect( attributeDetails.checkbox.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' )
+                } else throw new Error('"' + column.columnName + '" column attribute "' + attributeDetails.label + '" editable state is not defined in test case' );
+        }
     }
+}
 });

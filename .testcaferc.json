@@ -2,7 +2,7 @@
     "debugMode": true,
     "debugOnFail": true,
     "filter": {
-        "test": "Check field attributes of Default columns"
+        "test": "Check values and editing state for Field attributes of Default columns"
     },
     "pageLoadTimeout": 10000/*,
     "reporter": {

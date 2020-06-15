@@ -52,7 +52,7 @@ class PricingMatrix {
 	                //                         Label           Editable   Required    Text/Active
 					new FieldAttributeText(   'Field header',  false,     true,       'Line Item' ),
 					new FieldAttributeText(   'Char limit',    true,      true,       '255' ),
-					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),//
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
 					new FieldAttributeCheckbox( 'Currency',      false,     false,      false ),
@@ -270,7 +270,7 @@ class PricingMatrix {
 			this.isEditable = isEditable;
 			this.hasTooltip = hasTooltip;
 			this.isActive = isActive;
-			this.checkbox = Selector('span').withText(label).parent('div.v-input--selection-controls__input').find('input');
+			this.checkbox = Selector('span').withText(label).parent('div.v-input__slot').find('input');
 		}
 	}
 

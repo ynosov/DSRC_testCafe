@@ -1,12 +1,15 @@
 {
-    "debugMode": true,
-    "debugOnFail": true,
+    "debugMode": false,
+    "debugOnFail": false,
     "filter": {
-        "test": "Check values and editing state for Field attributes of Default columns"
+      "testMeta": {
+        "label": "default_columns"
+    }//,
+     //   "test": "Check values and editing state for Field attributes of Line Item column"
     },
-    "pageLoadTimeout": 10000/*,
+    "pageLoadTimeout": 10000,
     "reporter": {
       "name": "html",
       "output": "reports/report.html"
-  }*/
+  }
 }

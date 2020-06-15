@@ -49,10 +49,10 @@ class PricingMatrix {
 		this.defaultColumnsList = [
 			new Column( 'Line Item', false,
 				new FieldAttributes(
-	                //                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Line Item' ),
-					new FieldAttributeText(   'Char limit',    true,      true,       '255' ),
-					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),//
+	                //                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Line Item' ),
+					new FieldAttributeText(     'Char limit',    true,      true,       '255' ),
+					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
 					new FieldAttributeCheckbox( 'Currency',      false,     false,      false ),
@@ -65,9 +65,9 @@ class PricingMatrix {
 			) ),
 			new Column( 'Unit of measure', false,
 				new FieldAttributes(
-	                //                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Unit of measure' ),
-					new FieldAttributeText(   'Char limit',    true,      true,       '255' ),
+	                //                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Unit of measure' ),
+					new FieldAttributeText(     'Char limit',    true,      true,       '255' ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
@@ -81,9 +81,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Quantity', false,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Quantity' ),
-					new FieldAttributeText(   'Char limit',    true,      true,       '15'  ),
+					//                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Quantity' ),
+					new FieldAttributeText(     'Char limit',    true,      true,       '15'  ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
@@ -97,9 +97,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Baseline price', true,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Baseline price' ),
-					new FieldAttributeText(   'Char limit',    true,      true,       '15'  ),
+					//                          Label            Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Baseline price' ),
+					new FieldAttributeText(     'Char limit',    true,      true,       '15'  ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
@@ -113,9 +113,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Unit price', false,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Unit price' ),
-					new FieldAttributeText(   'Char limit',    true,      true,       '15'  ),
+					//                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Unit price' ),
+					new FieldAttributeText(     'Char limit',    true,      true,       '15'  ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
@@ -129,9 +129,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Currency', false,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Currency' ),
-					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					//                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Currency' ),
+					new FieldAttributeText(     'Char limit',    false,     true,       ''    ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
@@ -145,9 +145,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Commodity', false,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Commodity' ),
-					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					//                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Commodity' ),
+					new FieldAttributeText(     'Char limit',    false,     true,       ''    ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      false ),
@@ -161,9 +161,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Extended baseline price', true,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Extended baseline price' ),
-					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					//                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Extended baseline price' ),
+					new FieldAttributeText(     'Char limit',    false,     true,       ''    ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
@@ -177,9 +177,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Extended unit price', true,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Extended unit price' ),
-					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					//                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Extended unit price' ),
+					new FieldAttributeText(     'Char limit',    false,     true,       ''    ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),
@@ -193,9 +193,9 @@ class PricingMatrix {
 			)),
 			new Column( 'Savings', true,
 				new FieldAttributes(
-					//                         Label           Editable   Required    Text/Active
-					new FieldAttributeText(   'Field header',  false,     true,       'Savings' ),
-					new FieldAttributeText(   'Char limit',    false,     true,       ''    ),
+					//                           Label           Editable   Required    Text/Active
+					new FieldAttributeText(     'Field header',  false,     true,       'Savings' ),
+					new FieldAttributeText(     'Char limit',    false,     true,       ''    ),
 					new FieldAttributeCheckbox( 'Attachment',    false,     false,      false ),
 					new FieldAttributeCheckbox( 'Date',          false,     false,      false ),
 					new FieldAttributeCheckbox( 'Number',        false,     false,      true  ),

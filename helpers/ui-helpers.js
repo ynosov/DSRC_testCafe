@@ -1,5 +1,7 @@
 ﻿import { ClientFunction, Selector, t } from 'testcafe';
 import page from '../page-model';
+import { FieldAttributeText, FieldAttributeCheckbox } from '../page-model';
+import { assignedTo } from '../roles';
 import env from '../environment';
 import { sleep } from '../helpers/api-helpers';
 
@@ -50,3 +52,62 @@ export async function waitPricingMatrixPageToLoad () {
             continue;
         }};
 }
+
+export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
+    
+    const sv = browser.fixtureCtx.sv;
+
+    for ( const defaultColumn of page.pricingMatrix.defaultColumnsList ) {
+        if ( defaultColumn.columnName == defaultColumnName ) {
+           var column = defaultColumn;
+        }
+    }
+
+    await browser
+    .useRole(assignedTo)
+    .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
+    .click( page.sourcingEventDetails.rfxDetailsTab )
+    .click( page.sourcingEventDetails.pricingMatrixButton );
+    await waitPricingMatrixPageToLoad();
+    await browser.click( column.locator );
+
+        for ( const attribute of Object.keys(column.fieldAttributes.list) ) {
+            let attributeDetails = column.fieldAttributes.list[attribute];
+
+            //Check text attributes
+            if ( attributeDetails instanceof FieldAttributeText ) {
+                //Check text attributes values
+                await browser
+                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" text doesnt correspond to defined in test data' );
+                //Check that the attribute is not editable for specific columns
+                if ( attributeDetails.isEditable == false ) {
+                    await browser
+                    .expect( attributeDetails.textField.hasAttribute( 'disabled' ) )
+                    .ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
+                //Check that the attribute is editable for specific columns
+                } else if ( attributeDetails.isEditable == true ) {
+                    await browser.expect( attributeDetails.textField.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' )
+                } else throw new Error('"' + column.columnName + '" column attribute "' + attributeDetails.label + '" editable state is not defined in test case' )
+            
+            //Check checkbox attributes    
+            } else if ( attributeDetails instanceof FieldAttributeCheckbox ) {
+                //Check checkbox state
+                if ( attributeDetails.isActive == false ) {
+                    await browser
+                    .expect( attributeDetails.checkbox.getAttribute('aria-checked') ).eql( 'false', '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is active' );
+                } else if ( attributeDetails.isActive == true ) {
+                    await browser
+                    .expect( attributeDetails.checkbox.getAttribute('aria-checked') ).eql( 'true', '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not active' );
+                } else throw new Error( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" has not correctly defined checkbox state in test case' );
+               //Check that the attribute is not editable for specific columns
+               if ( attributeDetails.isEditable == false ) {
+                await browser
+                .expect( attributeDetails.checkbox.hasAttribute( 'disabled' ) )
+                .ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
+                //Check that the field is editable for specific columns
+                } else if ( attributeDetails.isEditable == true ) {
+                    await browser.expect( attributeDetails.checkbox.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' );
+                } else throw new Error('"' + column.columnName + '" column attribute "' + attributeDetails.label + '" editable state is not defined in test case' );
+        }
+}
+};

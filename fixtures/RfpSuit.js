@@ -2,9 +2,8 @@
 import { FieldAttributeText, FieldAttributeCheckbox } from '../page-model';
 import env from '../environment';
 import { logIn, getUserId, getUserInfo, createRfpSourcingEvent } from '../helpers/api-helpers';
-import { waitPricingMatrixPageToLoad } from '../helpers/ui-helpers';
+import { waitPricingMatrixPageToLoad, checkDefaultColumnFieldAttributes } from '../helpers/ui-helpers';
 import { assignedTo } from '../roles';
-import { debug } from 'request-promise';
 
 
 
@@ -113,7 +112,7 @@ test('Check which default Pricing Matrix columns can be removed', async browser 
 });
 
 
-test('Check values and editing state for Field attributes of Default columns', async browser => {
+test('Check values and editing state for Field attributes of all Default columns', async browser => {
     
     const sv = browser.fixtureCtx.sv;
 
@@ -164,9 +163,59 @@ test('Check values and editing state for Field attributes of Default columns', a
                 .ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
                 //Check that the field is editable for specific columns
                 } else if ( attributeDetails.isEditable == true ) {
-                    await browser.expect( attributeDetails.checkbox.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' )
+                    await browser.expect( attributeDetails.checkbox.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' );
                 } else throw new Error('"' + column.columnName + '" column attribute "' + attributeDetails.label + '" editable state is not defined in test case' );
         }
     }
 }
 });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Line Item column', async browser => {
+await checkDefaultColumnFieldAttributes( 'Line Item' );
+});
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Unit of measure column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Unit of measure' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Quantity column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Quantity' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Baseline price column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Baseline price' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Unit price column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Unit price' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Currency column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Currency' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Commodity column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Commodity' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Extended baseline price column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Extended baseline price' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Extended unit price column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Extended unit price' );
+    });
+
+test.meta('label', 'default_columns')
+('Check values and editing state for Field attributes of Savings column', async browser => {
+    await checkDefaultColumnFieldAttributes( 'Savings' );
+    });

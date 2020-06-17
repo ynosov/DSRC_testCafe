@@ -2,10 +2,10 @@
     "debugMode": false,
     "debugOnFail": false,
     "filter": {
-      "testMeta": {
+     /* "testMeta": {
         "label": "default_columns"
-    }//,
-     //   "test": "Check values and editing state for Field attributes of Line Item column"
+    },*/
+        "test": "Check values and editing state for Field attributes of Line Item column"
     },
     "pageLoadTimeout": 10000,
     "reporter": {

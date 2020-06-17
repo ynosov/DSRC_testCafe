@@ -73,10 +73,10 @@
       <div class="client-logo" style="padding:15px"></div>
       <div class="bg-primary" style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">
         <h3>Summary</h3><br>
-        <p class="lead">Start Time: Mon Jun 15 2020 13:05:23 GMT+0300 (Eastern European Summer Time)</p>
+        <p class="lead">Start Time: Wed Jun 17 2020 13:56:52 GMT+0300 (Eastern European Summer Time)</p>
         <p class="lead">Browsers: Chrome 83.0.4103.97 / Windows 10</p>
-        <p class="lead">Duration: 10m 05s</p>
-        <p class="lead">Tests Failed: 7 out of 10</p>
+        <p class="lead">Duration: 1m 28s</p>
+        <p class="lead">Tests Failed: 1 out of 1</p>
         <p class="lead">Tests Skipped: 0</p>
       </div><br>
       <table class="table sortable" style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">
@@ -91,85 +91,13 @@
           </tr>
         </thead>
         <tbody>
-           <tr class="success">
+           <tr class="danger">
   <td>1</td>
   <td>RFP Sourcing event</td>
   <td>Check values and editing state for Field attributes of Line Item column</td>
   <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>1m 27s</td>
-  <td>passed</td>
- </tr>
- <tr class="success">
-  <td>2</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Unit of measure column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>46s</td>
-  <td>passed</td>
- </tr>
- <tr class="success">
-  <td>3</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Quantity column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>1m 04s</td>
-  <td>passed</td>
- </tr>
- <tr class="danger">
-  <td>4</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Baseline price column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>1m 06s</td>
-  <td><a href="#test-4">failed</a></td>
- </tr>
- <tr class="danger">
-  <td>5</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Unit price column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>1m 01s</td>
-  <td><a href="#test-5">failed</a></td>
- </tr>
- <tr class="danger">
-  <td>6</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Currency column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>55s</td>
-  <td><a href="#test-6">failed</a></td>
- </tr>
- <tr class="danger">
-  <td>7</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Commodity column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>58s</td>
-  <td><a href="#test-7">failed</a></td>
- </tr>
- <tr class="danger">
-  <td>8</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Extended baseline price column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>56s</td>
-  <td><a href="#test-8">failed</a></td>
- </tr>
- <tr class="danger">
-  <td>9</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Extended unit price column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>55s</td>
-  <td><a href="#test-9">failed</a></td>
- </tr>
- <tr class="danger">
-  <td>10</td>
-  <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Savings column</td>
-  <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>57s</td>
-  <td><a href="#test-10">failed</a></td>
+  <td>1m 28s</td>
+  <td><a href="#test-1">failed</a></td>
  </tr>
 
         </tbody>
@@ -186,126 +114,24 @@
       </table>
       <br>
       <h3>Error Details</h3>
-       <h4 id="test-4" style="color: red;">4. RFP Sourcing event - Check values and editing state for Field attributes of Baseline price column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Baseline price&quot; column attribute &quot;Char limit&quot; text doesnt correspond to defined in test data: expected &#39;255&#39; to deeply equal &#39;15&#39;
+       <h4 id="test-1" style="color: red;">1. RFP Sourcing event - Check values and editing state for Field attributes of Line Item column</h4>
+ <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Line Item&quot; column attribute &quot;Char limit&quot; is not displayed on the screen: expected false to be truthy
 
 Browser: Chrome 83.0.4103.97 / Windows 10
 
-   76 |
-   77 |            //Check text attributes
-   78 |            if ( attributeDetails instanceof FieldAttributeText ) &#123
-   79 |                //Check text attributes values
-   80 |                await browser
- &gt; 81 |                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   82 |                //Check that the attribute is not editable for specific columns
-   83 |                if ( attributeDetails.isEditable == false ) {
-   84 |                    await browser
-   85 |                    .expect( attributeDetails.textField.hasAttribute( &#39;disabled&#39; ) )
-   86 |                    .ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is editable&#39; )
+   84 |                    .expect( attributeDetails.textField.value ).eql( &#39;&#39;,  &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is not displayed on the screen but contais not null value&#39; );
+   85 |                //Check specific attributes that are displayed
+   86 |                &#125 else &#123
+   87 |                    //Check that the attribute is visible
+   88 |                    await browser
+ &gt; 89 |                    .expect( attributeDetails.textField.visible ).ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is not displayed on the screen&#39; );
+   90 |                    //Check text attributes values
+   91 |                    await browser
+   92 |                    .expect( attributeDetails.textField.visible ).ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is not displayed on the screen&#39; )
+   93 |                    .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
+   94 |                    //Check that the attribute is not editable for specific columns
 
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:81:61) </pre><br> <h4 id="test-5" style="color: red;">5. RFP Sourcing event - Check values and editing state for Field attributes of Unit price column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Unit price&quot; column attribute &quot;Char limit&quot; text doesnt correspond to defined in test data: expected &#39;255&#39; to deeply equal &#39;15&#39;
-
-Browser: Chrome 83.0.4103.97 / Windows 10
-
-   76 |
-   77 |            //Check text attributes
-   78 |            if ( attributeDetails instanceof FieldAttributeText ) &#123
-   79 |                //Check text attributes values
-   80 |                await browser
- &gt; 81 |                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   82 |                //Check that the attribute is not editable for specific columns
-   83 |                if ( attributeDetails.isEditable == false ) {
-   84 |                    await browser
-   85 |                    .expect( attributeDetails.textField.hasAttribute( &#39;disabled&#39; ) )
-   86 |                    .ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is editable&#39; )
-
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:81:61) </pre><br> <h4 id="test-6" style="color: red;">6. RFP Sourcing event - Check values and editing state for Field attributes of Currency column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Currency&quot; column attribute &quot;Char limit&quot; text doesnt correspond to defined in test data: expected &#39;3&#39; to deeply equal &#39;&#39;
-
-Browser: Chrome 83.0.4103.97 / Windows 10
-
-   76 |
-   77 |            //Check text attributes
-   78 |            if ( attributeDetails instanceof FieldAttributeText ) &#123
-   79 |                //Check text attributes values
-   80 |                await browser
- &gt; 81 |                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   82 |                //Check that the attribute is not editable for specific columns
-   83 |                if ( attributeDetails.isEditable == false ) {
-   84 |                    await browser
-   85 |                    .expect( attributeDetails.textField.hasAttribute( &#39;disabled&#39; ) )
-   86 |                    .ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is editable&#39; )
-
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:81:61) </pre><br> <h4 id="test-7" style="color: red;">7. RFP Sourcing event - Check values and editing state for Field attributes of Commodity column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Commodity&quot; column attribute &quot;Char limit&quot; text doesnt correspond to defined in test data: expected &#39;255&#39; to deeply equal &#39;&#39;
-
-Browser: Chrome 83.0.4103.97 / Windows 10
-
-   76 |
-   77 |            //Check text attributes
-   78 |            if ( attributeDetails instanceof FieldAttributeText ) &#123
-   79 |                //Check text attributes values
-   80 |                await browser
- &gt; 81 |                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   82 |                //Check that the attribute is not editable for specific columns
-   83 |                if ( attributeDetails.isEditable == false ) {
-   84 |                    await browser
-   85 |                    .expect( attributeDetails.textField.hasAttribute( &#39;disabled&#39; ) )
-   86 |                    .ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is editable&#39; )
-
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:81:61) </pre><br> <h4 id="test-8" style="color: red;">8. RFP Sourcing event - Check values and editing state for Field attributes of Extended baseline price column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Extended baseline price&quot; column attribute &quot;Char limit&quot; text doesnt correspond to defined in test data: expected &#39;15&#39; to deeply equal &#39;&#39;
-
-Browser: Chrome 83.0.4103.97 / Windows 10
-
-   76 |
-   77 |            //Check text attributes
-   78 |            if ( attributeDetails instanceof FieldAttributeText ) &#123
-   79 |                //Check text attributes values
-   80 |                await browser
- &gt; 81 |                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   82 |                //Check that the attribute is not editable for specific columns
-   83 |                if ( attributeDetails.isEditable == false ) {
-   84 |                    await browser
-   85 |                    .expect( attributeDetails.textField.hasAttribute( &#39;disabled&#39; ) )
-   86 |                    .ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is editable&#39; )
-
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:81:61) </pre><br> <h4 id="test-9" style="color: red;">9. RFP Sourcing event - Check values and editing state for Field attributes of Extended unit price column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Extended unit price&quot; column attribute &quot;Char limit&quot; text doesnt correspond to defined in test data: expected &#39;15&#39; to deeply equal &#39;&#39;
-
-Browser: Chrome 83.0.4103.97 / Windows 10
-
-   76 |
-   77 |            //Check text attributes
-   78 |            if ( attributeDetails instanceof FieldAttributeText ) &#123
-   79 |                //Check text attributes values
-   80 |                await browser
- &gt; 81 |                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   82 |                //Check that the attribute is not editable for specific columns
-   83 |                if ( attributeDetails.isEditable == false ) {
-   84 |                    await browser
-   85 |                    .expect( attributeDetails.textField.hasAttribute( &#39;disabled&#39; ) )
-   86 |                    .ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is editable&#39; )
-
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:81:61) </pre><br> <h4 id="test-10" style="color: red;">10. RFP Sourcing event - Check values and editing state for Field attributes of Savings column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Savings&quot; column attribute &quot;Char limit&quot; text doesnt correspond to defined in test data: expected &#39;15&#39; to deeply equal &#39;&#39;
-
-Browser: Chrome 83.0.4103.97 / Windows 10
-
-   76 |
-   77 |            //Check text attributes
-   78 |            if ( attributeDetails instanceof FieldAttributeText ) &#123
-   79 |                //Check text attributes values
-   80 |                await browser
- &gt; 81 |                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   82 |                //Check that the attribute is not editable for specific columns
-   83 |                if ( attributeDetails.isEditable == false ) {
-   84 |                    await browser
-   85 |                    .expect( attributeDetails.textField.hasAttribute( &#39;disabled&#39; ) )
-   86 |                    .ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is editable&#39; )
-
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:81:61) </pre><br>
+   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:89:67) </pre><br>
     </div>
     <script>
       const modal = document.getElementById('myModal');

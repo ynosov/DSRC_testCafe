@@ -11,7 +11,7 @@
             "name": "Launch test files with TestCafe",
             "program": "${workspaceFolder}/../node_modules/testcafe/bin/testcafe.js",
             "args": [
-                "chrome:headless",
+                "chrome",
                 "./fixtures/RfpSuit.js"
             ],
             "console": "integratedTerminal",

@@ -1,6 +1,7 @@
 ﻿import { ClientFunction, Selector, t } from 'testcafe';
 import page from '../page-model';
-import { FieldAttributeText, FieldAttributeCheckbox } from '../page-model';
+import pricingMatrix_td from '../testData/pricingMartrix_td';
+import { FieldAttributeText, FieldAttributeCheckbox } from '../testData/pricingMartrix_td';
 import { assignedTo } from '../roles';
 import env from '../environment';
 import { sleep } from '../helpers/api-helpers';
@@ -57,7 +58,7 @@ export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
     
     const sv = browser.fixtureCtx.sv;
 
-    for ( const defaultColumn of page.pricingMatrix.defaultColumnsList ) {
+    for ( const defaultColumn of pricingMatrix_td.defaultColumnsList ) {
         if ( defaultColumn.columnName == defaultColumnName ) {
            var column = defaultColumn;
         }
@@ -74,23 +75,38 @@ export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
         for ( const attribute of Object.keys(column.fieldAttributes.list) ) {
             let attributeDetails = column.fieldAttributes.list[attribute];
 
-            //Check text attributes
+            //CHECK TEXT ATTRIBUTES
             if ( attributeDetails instanceof FieldAttributeText ) {
-                //Check text attributes values
-                await browser
-                .expect( attributeDetails.textField.value ).eql( attributeDetails.text, '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" text doesnt correspond to defined in test data' );
-                //Check that the attribute is not editable for specific columns
-                if ( attributeDetails.isEditable == false ) {
+                //Check that specific attributes are not displayed
+                if ( attributeDetails.textField.value == null ) {
                     await browser
-                    .expect( attributeDetails.textField.hasAttribute( 'disabled' ) )
-                    .ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
-                //Check that the attribute is editable for specific columns
-                } else if ( attributeDetails.isEditable == true ) {
-                    await browser.expect( attributeDetails.textField.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' )
-                } else throw new Error('"' + column.columnName + '" column attribute "' + attributeDetails.label + '" editable state is not defined in test case' )
-            
-            //Check checkbox attributes    
+                    .expect( attributeDetails.textField.visible ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is displayed on the screen' )
+                    .expect( attributeDetails.textField.value ).eql( '',  '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not displayed on the screen but contais not null value' );
+                //Check specific attributes that are displayed
+                } else {
+                    //Check that the attribute is visible
+                    await browser
+                    .expect( attributeDetails.textField.visible ).ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not displayed on the screen' );
+                    //Check text attributes values
+                    await browser
+                    .expect( attributeDetails.textField.visible ).ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not displayed on the screen' )
+                    .expect( attributeDetails.textField.value ).eql( attributeDetails.text, '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" text doesnt correspond to defined in test data' );
+                    //Check that the attribute is not editable for specific columns
+                    if ( attributeDetails.isEditable == false ) {
+                        await browser
+                        .expect( attributeDetails.textField.hasAttribute( 'disabled' ) )
+                        .ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
+                    //Check that the attribute is editable for specific columns
+                    } else if ( attributeDetails.isEditable == true ) {
+                        await browser.expect( attributeDetails.textField.hasAttribute('disabled') ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not editable' )
+                    } else throw new Error('"' + column.columnName + '" column attribute "' + attributeDetails.label + '" editable state is not defined in test case' )
+                }
+
+            //CHECK CHECKBOX ATTRIBUTES   
             } else if ( attributeDetails instanceof FieldAttributeCheckbox ) {
+                //Check that the attribute is displayed on the screen
+                await browser
+                .expect( attributeDetails.checkbox.visible ).ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not displayed on the screen' );
                 //Check checkbox state
                 if ( attributeDetails.isActive == false ) {
                     await browser

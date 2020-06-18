@@ -5,7 +5,7 @@
      /* "testMeta": {
         "label": "default_columns"
     },*/
-        "test": "Check values and editing state for Field attributes of Line Item column"
+        "test": "Check Pricing matrix - Back to event button"
     },
     "pageLoadTimeout": 10000,
     "reporter": {

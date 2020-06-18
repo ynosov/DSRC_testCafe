@@ -127,3 +127,15 @@ export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
         }
 }
 };
+
+/*export async function checkAllPossibleAttributeCombinations( attributeName ) {
+
+    await browser
+    .click( page.pricingMatrix.arrangeColumns.addNewColumnButton )
+    .expect( )
+
+
+    const attribute = pricingMatrix_td.possibleCheckboxAttributesCombinations.attributeName;
+
+
+}*/

@@ -73,10 +73,10 @@
       <div class="client-logo" style="padding:15px"></div>
       <div class="bg-primary" style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">
         <h3>Summary</h3><br>
-        <p class="lead">Start Time: Wed Jun 17 2020 13:56:52 GMT+0300 (Eastern European Summer Time)</p>
+        <p class="lead">Start Time: Thu Jun 18 2020 12:48:42 GMT+0300 (Eastern European Summer Time)</p>
         <p class="lead">Browsers: Chrome 83.0.4103.97 / Windows 10</p>
-        <p class="lead">Duration: 1m 28s</p>
-        <p class="lead">Tests Failed: 1 out of 1</p>
+        <p class="lead">Duration: 1m 19s</p>
+        <p class="lead">Tests Failed: 0 out of 1</p>
         <p class="lead">Tests Skipped: 0</p>
       </div><br>
       <table class="table sortable" style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">
@@ -91,13 +91,13 @@
           </tr>
         </thead>
         <tbody>
-           <tr class="danger">
+           <tr class="success">
   <td>1</td>
   <td>RFP Sourcing event</td>
-  <td>Check values and editing state for Field attributes of Line Item column</td>
+  <td>Check Pricing matrix - Back to event button</td>
   <td>Chrome 83.0.4103.97 / Windows 10</td>
-  <td>1m 28s</td>
-  <td><a href="#test-1">failed</a></td>
+  <td>1m 19s</td>
+  <td>passed</td>
  </tr>
 
         </tbody>
@@ -114,24 +114,7 @@
       </table>
       <br>
       <h3>Error Details</h3>
-       <h4 id="test-1" style="color: red;">1. RFP Sourcing event - Check values and editing state for Field attributes of Line Item column</h4>
- <pre style="padding:15px;box-shadow: 6px 6px 6px 6px #00000033;border-radius: 10px;">AssertionError: &quot;Line Item&quot; column attribute &quot;Char limit&quot; is not displayed on the screen: expected false to be truthy
-
-Browser: Chrome 83.0.4103.97 / Windows 10
-
-   84 |                    .expect( attributeDetails.textField.value ).eql( &#39;&#39;,  &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is not displayed on the screen but contais not null value&#39; );
-   85 |                //Check specific attributes that are displayed
-   86 |                &#125 else &#123
-   87 |                    //Check that the attribute is visible
-   88 |                    await browser
- &gt; 89 |                    .expect( attributeDetails.textField.visible ).ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is not displayed on the screen&#39; );
-   90 |                    //Check text attributes values
-   91 |                    await browser
-   92 |                    .expect( attributeDetails.textField.visible ).ok( &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; is not displayed on the screen&#39; )
-   93 |                    .expect( attributeDetails.textField.value ).eql( attributeDetails.text, &#39;&quot;&#39; + column.columnName + &#39;&quot; column attribute &quot;&#39; + attributeDetails.label + &#39;&quot; text doesnt correspond to defined in test data&#39; );
-   94 |                    //Check that the attribute is not editable for specific columns
-
-   at &lt;anonymous&gt; (C:\Users\ynosov.PROVECTUS\source\repos\SpaSourcingTestcafeEte\SpaSourcingTestcafeEte\helpers\ui-helpers.js:89:67) </pre><br>
+      
     </div>
     <script>
       const modal = document.getElementById('myModal');

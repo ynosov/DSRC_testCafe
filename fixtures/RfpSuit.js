@@ -58,10 +58,10 @@ test('Check Pricing matrix - Back to event button', async browser => {
     .click( page.sourcingEventDetails.pricingMatrixButton );
     await waitPricingMatrixPageToLoad();
     await browser
-    .expect( page.pricingMatrix.eventActions.visible ).ok('"Event actions" menu is not displayed on the screen' )
-    .click( page.pricingMatrix.eventActions )
-    .expect( page.pricingMatrix.backToEvent.visible ).ok( '"Back to event" menu item is not displayed on the screen' )
-    .click( page.pricingMatrix.backToEvent )
+    .expect( page.pricingMatrix.header.eventActions.visible ).ok('"Event actions" menu is not displayed on the screen' )
+    .click( page.pricingMatrix.header.eventActions )
+    .expect( page.pricingMatrix.header.backToEvent.visible ).ok( '"Back to event" menu item is not displayed on the screen' )
+    .click( page.pricingMatrix.header.backToEvent )
     .expect( page.sourcingEventDetails.title.innerText ).eql( 'Sourcing Event "' + sv.rfxDetails.rfx_name + ' (' + sv.rfxDetails.rfx_docnum + ')"', 'Incorrect title of the Sourcing Details page' )
     .expect( page.sourcingEventDetails.descriptionTab.exists ).ok( 'Redirection to "Description" tab doesnt work' );
 
@@ -85,7 +85,7 @@ test('Check default Pricing Matrix columns set', async browser => {
     }
     // Check that there is no odd columns in Arrange columns section
     await browser
-    .expect( page.pricingMatrix.allColumns.count ).eql( pricingMatrix_td.defaultColumnsList.length, 'There are odd columns or some columns are missed in "Arrange columns" section' );
+    .expect( page.pricingMatrix.arrangeColumns.allColumns.count ).eql( pricingMatrix_td.defaultColumnsList.length, 'There are odd columns or some columns are missed in "Arrange columns" section' );
    
 });
 

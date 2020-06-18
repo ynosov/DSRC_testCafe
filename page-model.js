@@ -11,7 +11,7 @@ class Page {
 	}
 }
 
-// Login page
+//Login page
 class Login {
 	constructor () {
 		this.loginField		= Selector('#user');
@@ -46,13 +46,40 @@ class TopPanel {
 //Pricing matrix page
 class PricingMatrix {
 	constructor() {
+		//Page header
+		this.header = new PricingMatrixHeader();
+		//"Arrange columns" form
+		this.arrangeColumns = new PricingMatrixArrangeColumnsForm();
+		//"Field attribute" form
+		this.fieldAttributes = new PricingMatrixFieldAttributesForm();
+	}
+}
+
+class PricingMatrixHeader {
+	constructor() {
 		this.eventActions = XPathSelector('//button[@title="Event actions"]');
 		this.backToEvent = XPathSelector('//div[contains(text(), "Back to event")]');
+	}
+}
+
+class PricingMatrixArrangeColumnsForm {
+	constructor() {
+		this.addNewColumnButton = XPathSelector( '//button[@title="Add new column"]' );
 		this.column = columnName => XPathSelector('//span[@class="single-column-wrapper"]//span[contains(text(), "' + columnName + '")]');
 		this.removeColumnButton = columnName => this.column( columnName ).find('button');
-		this.textFieldAttribute = label => Selector('span').withText( label ).parent('div.v-text-field__slot').find('input');
-		this.checkboxFieldAttribute = label => Selector('span').withText( label ).parent('div.v-input__slot').find('input');
-		this.allColumns = Selector('span').withAttribute('class', 'single-column-wrapper');
+		this.allColumns = Selector( 'span' ).withAttribute( 'class', 'single-column-wrapper' );
+	}
+}
+
+class PricingMatrixFieldAttributesForm {
+	constructor() {
+		this.form = XPathSelector( '//div[@class="field-attrs-wrapper"]' );
+		this.formTitle = this.form.find( 'span' );
+		this.saveFieldButton = this.form.find('button').withAttribute('title', 'Save field');
+		this.discardChangesButton = this.form.find('button').withAttribute('title', 'Discard changes');
+		this.expandButton = XPathSelector('//div[@class="field-attrs-wrapper"]//button[not(@title)]');
+		this.textAttribute = label => Selector('span').withText( label ).parent('div.v-text-field__slot').find('input');
+		this.checkboxAttribute = label => Selector('span').withText( label ).parent('div.v-input__slot').find('input');
 	}
 }
 

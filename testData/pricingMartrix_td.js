@@ -4,6 +4,7 @@ import page from '../page-model'
 class PricingMarix_td { 
 	constructor () {
         this.defaultColumnsList = defaultColumnsList;
+        this.possibleCheckboxAttributesCombinations = possibleCheckboxAttributesCombinations;
 	}
 }
 
@@ -31,9 +32,9 @@ class FieldAttributes {
 class Column {
     constructor ( columnName, isRemovable, fieldAttributes ) {
         this.columnName      = columnName;
-        this.locator         = page.pricingMatrix.column( columnName );
+        this.locator         = page.pricingMatrix.arrangeColumns.column( columnName );
         this.isRemovable     = isRemovable;
-        this.removeButton    = page.pricingMatrix.removeColumnButton( columnName );
+        this.removeButton    = page.pricingMatrix.arrangeColumns.removeColumnButton( columnName );
         this.fieldAttributes = fieldAttributes;
     }
 }
@@ -44,7 +45,7 @@ export class FieldAttributeText {
         this.isEditable = isEditable;
         this.isRequired = isRequired;
         this.text = text;
-        this.textField = page.pricingMatrix.textFieldAttribute( label );
+        this.textField = page.pricingMatrix.fieldAttributes.textAttribute( label );
     }
 }
 
@@ -54,7 +55,7 @@ export class FieldAttributeCheckbox {
         this.isEditable = isEditable;
         this.hasTooltip = hasTooltip;
         this.isActive = isActive;
-        this.checkbox = page.pricingMatrix.checkboxFieldAttribute( label );
+        this.checkbox = page.pricingMatrix.fieldAttributes.checkboxAttribute( label );
     }
 }
 
@@ -222,5 +223,28 @@ const defaultColumnsList = [
 			))
         ];
             
+        const possibleCheckboxAttributesCombinations = {
+            'Default':       [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent', 'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
+            'Attachment':    [                                                        'Internal only', 'Read only', 'Required'                            ],
+            'Date':          [                                                        'Internal only', 'Read only', 'Response', 'Required'                ],
+            'Number':        [                                 'Currency', 'Percent', 'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
+            'Currency':      [                                                        'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
+            'Percent':       [                                                        'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
+            'Internal only': [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent',                                                       'Calculation' ],
+            'Read only':     [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent',                                                       'Calculation' ],
+            'Response':      [               'Date', 'Number', 'Currency', 'Percent',                                           'Required'                ],
+            'Required':      [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent', 'Internal only', 'Read only', 'Response', 'Required'                ],
+            'Calculation':   [                                 'Currency', 'Percent', 'Internal only', 'Read only'                                        ]
+        }
+
+        const pairedCheckboxAttributes = {
+            'Currency':    'Number',
+            'Percent':     'Number',
+            'Calculation': 'Number'
+        }
+
+        const requiredCheckboxAttribute = [ 'Internal only', 'Read only', 'Response' ]
+
+
 
 export default new PricingMarix_td();

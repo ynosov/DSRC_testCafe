@@ -5,6 +5,8 @@ class PricingMarix_td {
 	constructor () {
         this.defaultColumnsList = defaultColumnsList;
         this.possibleCheckboxAttributesCombinations = possibleCheckboxAttributesCombinations;
+        this.pairedCheckboxAttributes = pairedCheckboxAttributes;
+        this.requiredCheckboxAttribute = requiredCheckboxAttribute;
 	}
 }
 
@@ -225,16 +227,16 @@ const defaultColumnsList = [
             
         const possibleCheckboxAttributesCombinations = {
             'Default':       [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent', 'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
-            'Attachment':    [                                                        'Internal only', 'Read only', 'Required'                            ],
+            'Attachment':    [                                                        'Internal only', 'Read only',             'Required'                ],
             'Date':          [                                                        'Internal only', 'Read only', 'Response', 'Required'                ],
             'Number':        [                                 'Currency', 'Percent', 'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
-            'Currency':      [                                                        'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
-            'Percent':       [                                                        'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
-            'Internal only': [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent',                                                       'Calculation' ],
-            'Read only':     [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent',                                                       'Calculation' ],
+            'Currency':      [                       'Number',                        'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
+            'Percent':       [                       'Number',                        'Internal only', 'Read only', 'Response', 'Required', 'Calculation' ],
+            'Internal only': [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent',                                           'Required', 'Calculation' ],
+            'Read only':     [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent',                                           'Required', 'Calculation' ],
             'Response':      [               'Date', 'Number', 'Currency', 'Percent',                                           'Required'                ],
-            'Required':      [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent', 'Internal only', 'Read only', 'Response', 'Required'                ],
-            'Calculation':   [                                 'Currency', 'Percent', 'Internal only', 'Read only'                                        ]
+            'Required':      [ 'Attachment', 'Date', 'Number', 'Currency', 'Percent', 'Internal only', 'Read only', 'Response',                           ],
+            'Calculation':   [                       'Number', 'Currency', 'Percent', 'Internal only', 'Read only'                                        ]
         }
 
         const pairedCheckboxAttributes = {

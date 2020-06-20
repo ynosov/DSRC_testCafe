@@ -128,14 +128,111 @@ export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
 }
 };
 
-/*export async function checkAllPossibleAttributeCombinations( attributeName ) {
+
+
+export async function checkAllPossibleAttributeCombinations( attributeName ) {
+
+    const fa = page.pricingMatrix.fieldAttributes;
+
+    let compatibleAttributes = [ ...pricingMatrix_td.possibleCheckboxAttributesCombinations[ attributeName ] ];
+    const allAttributes = pricingMatrix_td.possibleCheckboxAttributesCombinations[ 'Default' ];
+    let activeAttributes = [];
+    let inactiveAttributes = [];
+    let enabledAttributes = [];
+    let disabledAttibutes = [];
+
+    async function defineAttributesInitialState() {
+        activeAttributes = [ attributeName ];
+        inactiveAttributes = allAttributes.filter( el => !activeAttributes.includes( el ) );
+        enabledAttributes = [ ...pricingMatrix_td.possibleCheckboxAttributesCombinations[ attributeName ] ];
+        enabledAttributes.push( attributeName );
+         //Add paired attributes of the attribute
+        if ( pricingMatrix_td.pairedCheckboxAttributes[ attributeName ] ) {
+            activeAttributes.concat( pricingMatrix_td.pairedCheckboxAttributes[ attributeName ] );
+        }
+        disabledAttibutes = allAttributes.filter( el => !enabledAttributes.includes( el ) );
+    }
+
+    async function updateAttributesState( attr ) {
+        enabledAttributes = enabledAttributes.filter( element => pricingMatrix_td.possibleCheckboxAttributesCombinations[ attr ].includes( element ) );
+        enabledAttributes.push( attr );
+        disabledAttibutes = allAttributes.filter(el => !enabledAttributes.includes( el ));
+        activeAttributes.push( attr );
+        //Add paired attributes for just ticked attribute
+        if ( pricingMatrix_td.pairedCheckboxAttributes[ attr ] ) {
+            for ( const pairedAttr of pricingMatrix_td.pairedCheckboxAttributes[ attr ] ) {
+                activeAttributes.push( pairedAttr );
+            }
+        }
+        inactiveAttributes = allAttributes.filter( el => !activeAttributes.includes( el ));
+    }
+
+    async function checkAllAttributesState() {
+        //Check attributes that should be editable
+        for ( const attr of enabledAttributes ) {
+            await browser
+            .expect( fa.checkboxAttribute( attr ).hasAttribute('disabled') ).notOk( 'Attribute "' + attr + '" is not editable' );
+        }
+        //Check attributes that should be not editable
+        for ( const attr of disabledAttibutes ) {
+            await browser
+            .expect( fa.checkboxAttribute( attr ).hasAttribute('disabled') ).ok( 'Attribute "' + attr + '" is editable' );
+        }
+        //Check attributes that should be active
+        for ( const attr of activeAttributes ) {
+            await browser
+            .expect( fa.checkboxAttribute( attr ).getAttribute('aria-checked') ).eql( 'true', 'Column attribute "' + attr + '" is not active' );
+        }
+        //Check attributes that should be inactive
+        for ( const attr of inactiveAttributes ) {
+            await browser
+            .expect( fa.checkboxAttribute( attr ).getAttribute('aria-checked') ).eql( 'false', 'Column attribute "' + attr + '" is active' );
+        }
+    }
+	
+	await browser
+    .click( page.pricingMatrix.arrangeColumns.addNewColumnButton )
+    .expect( fa.form.visible ).ok( '"Field attributes" form is not visible' );
+
+    let i = 0;
+
+    //Check all possible attributes combinations
+    while ( i < pricingMatrix_td.possibleCheckboxAttributesCombinations[ attributeName ].length ) {
+
+        await browser.click( fa.checkboxAttribute( attributeName ) );
+
+
+        await defineAttributesInitialState();
+        await checkAllAttributesState();
+
+        attributeIterator: for ( const attr of compatibleAttributes ) {
+
+            //Skip attribute if it is not enabled
+            if ( !(enabledAttributes.includes( attr )) ) {
+                continue attributeIterator;
+            }
+
+            await browser.click( fa.checkboxAttribute( attr ) );
+
+            await updateAttributesState( attr );
+            await checkAllAttributesState();
+        }
+
+    //Start next iteration from different attribute
+    compatibleAttributes.push( await compatibleAttributes.shift() );
+
+    i++;
 
     await browser
-    .click( page.pricingMatrix.arrangeColumns.addNewColumnButton )
-    .expect( )
+    .click( fa.discardChangesButton );
 
+    //Check that all attributes values are reset
+    for ( const attr of allAttributes ) {
+        await browser
+        .expect( fa.checkboxAttribute( attr ).hasAttribute('disabled') ).notOk( 'Attribute "' + attr + '" is not editable' )
+        .expect( fa.checkboxAttribute( attr ).getAttribute('aria-checked') ).eql( 'false', 'Column attribute "' + attr + '" is active' );
+    }
 
-    const attribute = pricingMatrix_td.possibleCheckboxAttributesCombinations.attributeName;
+    }
 
-
-}*/
+}

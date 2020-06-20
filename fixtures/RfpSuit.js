@@ -1,9 +1,8 @@
 ﻿import page from '../page-model';
-import { FieldAttributeText, FieldAttributeCheckbox } from '../page-model';
 import pricingMatrix_td from '../testData/pricingMartrix_td';
 import env from '../environment';
 import { logIn, getUserId, getUserInfo, createRfpSourcingEvent } from '../helpers/api-helpers';
-import { waitPricingMatrixPageToLoad, checkDefaultColumnFieldAttributes } from '../helpers/ui-helpers';
+import { waitPricingMatrixPageToLoad, checkDefaultColumnFieldAttributes, checkAllPossibleAttributeCombinations } from '../helpers/ui-helpers';
 import { assignedTo } from '../roles';
 
 
@@ -162,3 +161,18 @@ test.meta('label', 'default_columns')
 ('Check values and editing state for Field attributes of Savings column', async browser => {
     await checkDefaultColumnFieldAttributes( 'Savings' );
     });
+
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Attachment attibute with other attributes in Field attributes area', async browser => {
+
+    const sv = browser.fixtureCtx.sv;
+
+    await browser
+    .useRole(assignedTo)
+    .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
+    .click( page.sourcingEventDetails.rfxDetailsTab )
+    .click( page.sourcingEventDetails.pricingMatrixButton );
+    await waitPricingMatrixPageToLoad();
+    await checkAllPossibleAttributeCombinations( 'Attachment' );
+});

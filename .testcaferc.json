@@ -5,7 +5,7 @@
      /* "testMeta": {
         "label": "default_columns"
     },*/
-        "test": "Check Pricing matrix - Back to event button"
+        "test": "Check compatibility of Attachment attibute with other attributes in Field attributes area"
     },
     "pageLoadTimeout": 10000,
     "reporter": {

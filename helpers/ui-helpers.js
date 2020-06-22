@@ -45,12 +45,11 @@ export const openSourcingEventRfxDetailsById = async ({ id, browser }) => {
 export async function waitPricingMatrixPageToLoad () {
     const getPageUrl = ClientFunction(() => window.location.href.toString());
     for ( let i = 0; i <= 10; i++ ) {
-    try {
-        if ( await browser.expect(getPageUrl()).contains(env.url + 'webapps/' + env.vrp + '/sourcing/#/matrixPricing') ) {
+        let currentUrl = await getPageUrl();
+        if ( currentUrl.includes(env.url + 'webapps/' + env.vrp + '/sourcing/#/matrixPricing') ) {
             break;
-        }} catch (e) {
+        } else {
             await sleep(3000);
-            continue;
         }};
 }
 
@@ -132,10 +131,19 @@ export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
 
 export async function checkAllPossibleAttributeCombinations( attributeName ) {
 
+const sv = browser.fixtureCtx.sv;
+
+    await browser
+    .useRole(assignedTo)
+    .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
+    .click( page.sourcingEventDetails.rfxDetailsTab )
+    .click( page.sourcingEventDetails.pricingMatrixButton );
+    await waitPricingMatrixPageToLoad();
+
     const fa = page.pricingMatrix.fieldAttributes;
 
     let compatibleAttributes = [ ...pricingMatrix_td.possibleCheckboxAttributesCombinations[ attributeName ] ];
-    const allAttributes = pricingMatrix_td.possibleCheckboxAttributesCombinations[ 'Default' ];
+    const allAttributes = [ ...pricingMatrix_td.possibleCheckboxAttributesCombinations[ 'Default' ] ];
     let activeAttributes = [];
     let inactiveAttributes = [];
     let enabledAttributes = [];
@@ -143,28 +151,30 @@ export async function checkAllPossibleAttributeCombinations( attributeName ) {
 
     async function defineAttributesInitialState() {
         activeAttributes = [ attributeName ];
-        inactiveAttributes = allAttributes.filter( el => !activeAttributes.includes( el ) );
         enabledAttributes = [ ...pricingMatrix_td.possibleCheckboxAttributesCombinations[ attributeName ] ];
         enabledAttributes.push( attributeName );
-         //Add paired attributes of the attribute
+        //Add paired attributes of the attribute
         if ( pricingMatrix_td.pairedCheckboxAttributes[ attributeName ] ) {
-            activeAttributes.concat( pricingMatrix_td.pairedCheckboxAttributes[ attributeName ] );
+            activeAttributes = activeAttributes.concat( pricingMatrix_td.pairedCheckboxAttributes[ attributeName ] );
+            enabledAttributes = enabledAttributes.concat( pricingMatrix_td.pairedCheckboxAttributes[ attributeName ] );
         }
+        inactiveAttributes = allAttributes.filter( el => !activeAttributes.includes( el ) );
         disabledAttibutes = allAttributes.filter( el => !enabledAttributes.includes( el ) );
     }
 
     async function updateAttributesState( attr ) {
         enabledAttributes = enabledAttributes.filter( element => pricingMatrix_td.possibleCheckboxAttributesCombinations[ attr ].includes( element ) );
         enabledAttributes.push( attr );
-        disabledAttibutes = allAttributes.filter(el => !enabledAttributes.includes( el ));
         activeAttributes.push( attr );
         //Add paired attributes for just ticked attribute
         if ( pricingMatrix_td.pairedCheckboxAttributes[ attr ] ) {
             for ( const pairedAttr of pricingMatrix_td.pairedCheckboxAttributes[ attr ] ) {
                 activeAttributes.push( pairedAttr );
+                enabledAttributes.push( pairedAttr );
             }
         }
         inactiveAttributes = allAttributes.filter( el => !activeAttributes.includes( el ));
+        disabledAttibutes = allAttributes.filter( el => !enabledAttributes.includes( el ));
     }
 
     async function checkAllAttributesState() {

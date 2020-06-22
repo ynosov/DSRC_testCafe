@@ -1,13 +1,21 @@
 {
-    "debugMode": false,
-    "debugOnFail": false,
+    "debugMode": true,
+    "debugOnFail": true,
+    "selectorTimeout": 1000,
+    "assertionTimeout": 1000,
+    "pageLoadTimeout": 3000,
+    "screenshots": {
+        "path": "reports/screenshots",
+        "fullPage": true,
+        "pathPattern": "${TEST_INDEX}/${FILE_INDEX}.png",
+        "takeOnFails": true
+    },
     "filter": {
      /* "testMeta": {
-        "label": "default_columns"
+        "label": "attributes_compatibility"
     },*/
-        "test": "Check compatibility of Attachment attibute with other attributes in Field attributes area"
+        "test": "Check compatibility of Percent attribute with other attributes in Field attributes area"
     },
-    "pageLoadTimeout": 10000,
     "reporter": {
       "name": "html",
       "output": "reports/report.html"

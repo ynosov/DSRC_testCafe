@@ -164,15 +164,51 @@ test.meta('label', 'default_columns')
 
 
 test.meta('label', 'attributes_compatibility')
-('Check compatibility of Attachment attibute with other attributes in Field attributes area', async browser => {
-
-    const sv = browser.fixtureCtx.sv;
-
-    await browser
-    .useRole(assignedTo)
-    .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
-    .click( page.sourcingEventDetails.rfxDetailsTab )
-    .click( page.sourcingEventDetails.pricingMatrixButton );
-    await waitPricingMatrixPageToLoad();
+('Check compatibility of Attachment attribute with other attributes in Field attributes area', async browser => {
     await checkAllPossibleAttributeCombinations( 'Attachment' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Date attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Date' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Number attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Number' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Currency attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Currency' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Percent attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Percent' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Internal only attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Internal only' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Read only attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Read only' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Response attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Response' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Required attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Required' );
+});
+
+test.meta('label', 'attributes_compatibility')
+('Check compatibility of Calculation attribute with other attributes in Field attributes area', async browser => {
+    await checkAllPossibleAttributeCombinations( 'Calculation' );
 });

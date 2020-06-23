@@ -246,3 +246,57 @@ const sv = browser.fixtureCtx.sv;
     }
 
 }
+
+
+export async function checkCharlimits() {
+
+    const sv = browser.fixtureCtx.sv;
+    const fa = page.pricingMatrix.fieldAttributes;
+    const attributes = pricingMatrix_td.charLimits;
+    const pairedAttributes = pricingMatrix_td.pairedCheckboxAttributes;
+    
+        await browser
+        .useRole( assignedTo )
+        .navigateTo( page.sourcingEventDetails.getPageById( sv.rfxDetails.rfxid ) )
+        .click( page.sourcingEventDetails.rfxDetailsTab )
+        .click( page.sourcingEventDetails.pricingMatrixButton );
+        await waitPricingMatrixPageToLoad();
+        await browser
+        .click( page.pricingMatrix.arrangeColumns.addNewColumnButton )
+        .expect( fa.form.visible ).ok( '"Field attributes" form is not visible' );
+
+        for ( const attr of Object.keys( attributes ) ) {
+
+            if ( attr != 'Default' ) {
+                await browser
+                .click( fa.checkboxAttribute( attr ) );
+            }
+
+            if ( attributes[ attr ] == null ) {
+                await browser
+                .expect( fa.textAttribute( 'Char limit' ).visible ).notOk( '"Char limit" is visible for the attribute ' + attr )
+                .expect( fa.textAttribute( 'Char limit' ).hasAttribute( 'disabled' ) ).ok( '"Char limit" is editable for the attribute ' + attr )
+                .expect( fa.textAttribute( 'Char limit' ).value ).eql( '',  '"Char limit" value is incorrect for the attribute ' + attr );
+            } else {
+                await browser
+                .expect( fa.textAttribute( 'Char limit' ).visible ).ok( '"Char limit" is not visible for the attribute ' + attr )
+                .expect( fa.textAttribute( 'Char limit' ).hasAttribute( 'disabled' ) ).notOk( '"Char limit" is not editable for the attribute ' + attr )
+                .expect( fa.textAttribute( 'Char limit' ).value ).eql( attributes[ attr ],  '"Char limit" value is incorrect for the attribute ' + attr );
+            }
+
+            if ( attr != 'Default' ) {
+                await browser
+                .click( fa.checkboxAttribute( attr ) );
+                if ( Object.keys( pairedAttributes ).includes( attr ) ) {
+                    for (const pairedAttr of pairedAttributes[ attr ]  ) {
+                        await browser
+                        .click( fa.checkboxAttribute( pairedAttr ) );
+                    }
+                }
+            }
+
+        }
+
+
+
+}

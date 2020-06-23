@@ -2,7 +2,7 @@
 import pricingMatrix_td from '../testData/pricingMartrix_td';
 import env from '../environment';
 import { logIn, getUserId, getUserInfo, createRfpSourcingEvent } from '../helpers/api-helpers';
-import { waitPricingMatrixPageToLoad, checkDefaultColumnFieldAttributes, checkAllPossibleAttributeCombinations } from '../helpers/ui-helpers';
+import { waitPricingMatrixPageToLoad, checkDefaultColumnFieldAttributes, checkAllPossibleAttributeCombinations, checkCharlimits } from '../helpers/ui-helpers';
 import { assignedTo } from '../roles';
 
 
@@ -211,4 +211,9 @@ test.meta('label', 'attributes_compatibility')
 test.meta('label', 'attributes_compatibility')
 ('Check compatibility of Calculation attribute with other attributes in Field attributes area', async browser => {
     await checkAllPossibleAttributeCombinations( 'Calculation' );
+});
+
+
+test('Check Char limit field for different attributes', async browser => {
+    await checkCharlimits();
 });

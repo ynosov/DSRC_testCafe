@@ -6,7 +6,8 @@ class PricingMarix_td {
         this.defaultColumnsList = defaultColumnsList;
         this.possibleCheckboxAttributesCombinations = possibleCheckboxAttributesCombinations;
         this.pairedCheckboxAttributes = pairedCheckboxAttributes;
-        this.requiredCheckboxAttribute = requiredCheckboxAttribute;
+		this.requiredCheckboxAttribute = requiredCheckboxAttribute;
+		this.charLimits = charLimits;
 	}
 }
 
@@ -247,6 +248,14 @@ const defaultColumnsList = [
 
         const requiredCheckboxAttribute = [ 'Internal only', 'Read only', 'Response' ]
 
+		const charLimits = {
+			'Default': '1000',
+			'Number': '20',
+			'Currency': '20',
+			'Percent': '10',
+			'Date': '8',
+			'Calculation': null
+		}
 
 
 export default new PricingMarix_td();

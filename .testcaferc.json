@@ -14,7 +14,7 @@
      /* "testMeta": {
         "label": "attributes_compatibility"
     },*/
-        "test": "Check compatibility of Percent attribute with other attributes in Field attributes area"
+        "test": "Check Char limit field for different attributes"
     },
     "reporter": {
       "name": "html",

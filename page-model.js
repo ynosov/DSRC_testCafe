@@ -52,6 +52,8 @@ class PricingMatrix {
 		this.arrangeColumns = new PricingMatrixArrangeColumnsForm();
 		//"Field attribute" form
 		this.fieldAttributes = new PricingMatrixFieldAttributesForm();
+		//"Edit pricing matrix" form
+		this.editPricingMatrix = new PricingMatrixEditPricingMatrixForm();
 	}
 }
 
@@ -83,5 +85,29 @@ class PricingMatrixFieldAttributesForm {
 	}
 }
 
+class PricingMatrixEditPricingMatrixForm {
+	constructor() {
+		this.form = XPathSelector( '//div[@class="pricing-grid"]' );
+		this.addLotButton = this.form.find('button').withAttribute('title', 'Add lot');
+		this.saveGridButton = this.form.find('button').withAttribute('title', 'Save grid');
+		this.table = new PricingMatrixTable();
+	}
+}
+
+class PricingMatrixTable {
+	constructor() {
+		this.grid = XPathSelector('//div[@class="pricing-grid"]//div[@class="pr-grid-cont"]');
+		this.header = new PricingMatrixTableHeaders();
+		this.cell = ( row, column ) => XPathSelector('//div[@row-index="' + row + '"]//div[@aria-colindex="' + column + '"]//div | //div[@row-index="' + row + '"]//div[@aria-colindex="' + column + '"]//span | //div[@row-index="' + row + '"]//div[@aria-colindex="' + column + '"]//input');
+	}
+}
+
+class PricingMatrixTableHeaders {
+	constructor( grid ) {
+		this.lots = grid.find('div').withAttribute('class', 'ag-pinned-left-header').find('div').withAttribute('class', 'header').withText('Lots');
+		this.lineItem = grid.find('div').withAttribute('class', 'header').withText('Line Item').sibling('div').withAttribute('class', 'actions-renderer-header');
+		this.column = columnName => grid.find('div').withAttribute('class', 'required-header').find('span').withText( columnName );
+	}
+}
 
 export default new Page();

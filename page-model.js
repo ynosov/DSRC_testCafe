@@ -67,8 +67,9 @@ class PricingMatrixHeader {
 class PricingMatrixArrangeColumnsForm {
 	constructor() {
 		this.addNewColumnButton = XPathSelector( '//button[@title="Add new column"]' );
-		this.column = columnName => XPathSelector('//span[@class="single-column-wrapper"]//span[contains(text(), "' + columnName + '")]');
-		this.removeColumnButton = columnName => this.column( columnName ).find('button');
+		this.columnByName = columnName => XPathSelector('//span[@class="single-column-wrapper"]//span[contains(text(), "' + columnName + '")]');
+		this.columnByOrderNumber = orderNumber => XPathSelector('//span[@class="single-column-wrapper"][' + orderNumber + ']//span[@class="v-chip__content"]')
+		this.removeColumnButton = columnName => this.columnByName( columnName ).find('button');
 		this.allColumns = Selector( 'span' ).withAttribute( 'class', 'single-column-wrapper' );
 	}
 }

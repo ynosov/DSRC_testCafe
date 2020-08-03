@@ -35,7 +35,7 @@ class FieldAttributes {
 class Column {
     constructor ( columnName, isRemovable, fieldAttributes ) {
         this.columnName      = columnName;
-        this.locator         = page.pricingMatrix.arrangeColumns.column( columnName );
+        this.locator         = page.pricingMatrix.arrangeColumns.columnByName( columnName );
         this.isRemovable     = isRemovable;
         this.removeButton    = page.pricingMatrix.arrangeColumns.removeColumnButton( columnName );
         this.fieldAttributes = fieldAttributes;

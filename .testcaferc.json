@@ -1,6 +1,6 @@
 {
-    "debugMode": true,
-    "debugOnFail": true,
+    "debugMode": false,
+    "debugOnFail": false,
     "selectorTimeout": 1000,
     "assertionTimeout": 1000,
     "pageLoadTimeout": 3000,
@@ -10,12 +10,12 @@
         "pathPattern": "${TEST_INDEX}/${FILE_INDEX}.png",
         "takeOnFails": true
     },
-    "filter": {
-     /* "testMeta": {
+   /* "filter": {
+      "testMeta": {
         "label": "attributes_compatibility"
-    },*/
-        "test": "Check Char limit field for different attributes"
     },
+        "test": "Check compatibility of Internal only attribute with other attributes in Field attributes area"
+    },*/
     "reporter": {
       "name": "html",
       "output": "reports/report.html"

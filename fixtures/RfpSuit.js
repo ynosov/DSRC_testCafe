@@ -13,12 +13,12 @@ fixture`RFP Sourcing event`
 
         ctx.sv = {
             rfxDetails: {
-                rfxid: '3296',
-                rfx_name: 'SPA_AT_RFP_348099436',
-                rfx_docnum: 'DSE20203305'
+                rfxid: '3678',
+                rfx_name: 'SPA_AT_RFP_839720742',
+                rfx_docnum: 'DSE20203687'
             }
         };
-        /*try{
+      /*  try{
             await logIn( env.assignedTo ).then( cookie => ctx.sv.cookie = cookie);
             await getUserId( ctx.sv.cookie ).then( userId => ctx.sv.userId = userId);
             await getUserInfo( ctx.sv.cookie, ctx.sv.userId ).then( userInfo => ctx.sv.userInfo = userInfo);

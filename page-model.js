@@ -82,7 +82,7 @@ class PricingMatrixFieldAttributesForm {
 		this.discardChangesButton = this.form.find('button').withAttribute('title', 'Discard changes');
 		this.expandButton = XPathSelector('//div[@class="field-attrs-wrapper"]//button[not(@title)]');
 		this.textAttribute = label => Selector('span').withText( label ).parent('div.v-text-field__slot').find('input');
-		this.checkboxAttribute = label => Selector('*').withText( label ).parent('div.v-input__slot').find('input');
+		this.checkboxAttribute = label => Selector('*').withText( label ).parent('div').withAttribute('class', 'row field-attrs-row').find('input');
 	}
 }
 
@@ -98,7 +98,7 @@ class PricingMatrixEditPricingMatrixForm {
 class PricingMatrixTable {
 	constructor() {
 		this.grid = XPathSelector('//div[@class="pricing-grid"]//div[@class="pr-grid-cont"]');
-		this.header = new PricingMatrixTableHeaders();
+		this.header = new PricingMatrixTableHeaders( this.grid );
 		this.cell = ( row, column ) => XPathSelector('//div[@row-index="' + row + '"]//div[@aria-colindex="' + column + '"]//div | //div[@row-index="' + row + '"]//div[@aria-colindex="' + column + '"]//span | //div[@row-index="' + row + '"]//div[@aria-colindex="' + column + '"]//input');
 	}
 }

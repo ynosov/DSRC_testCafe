@@ -76,11 +76,12 @@ export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
 
             //CHECK TEXT ATTRIBUTES
             if ( attributeDetails instanceof FieldAttributeText ) {
-                //Check that specific attributes are not displayed
-                if ( attributeDetails.textField.value == null ) {
+                //Check that specific attributes are (not displayed) *disabled and have no value
+                if ( attributeDetails.text == null ) {
                     await browser
-                    .expect( attributeDetails.textField.visible ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is displayed on the screen' )
-                    .expect( attributeDetails.textField.value ).eql( '',  '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not displayed on the screen but contais not null value' );
+                    //.expect( attributeDetails.textField.visible ).notOk( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is displayed on the screen' )
+                    .expect( attributeDetails.textField.hasAttribute( 'disabled' ) ).ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is editable' )
+                    .expect( attributeDetails.textField.value ).eql( '',  '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" contais not empty value' );
                 //Check specific attributes that are displayed
                 } else {
                     //Check that the attribute is visible
@@ -88,7 +89,6 @@ export async function checkDefaultColumnFieldAttributes( defaultColumnName ) {
                     .expect( attributeDetails.textField.visible ).ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not displayed on the screen' );
                     //Check text attributes values
                     await browser
-                    .expect( attributeDetails.textField.visible ).ok( '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" is not displayed on the screen' )
                     .expect( attributeDetails.textField.value ).eql( attributeDetails.text, '"' + column.columnName + '" column attribute "' + attributeDetails.label + '" text doesnt correspond to defined in test data' );
                     //Check that the attribute is not editable for specific columns
                     if ( attributeDetails.isEditable == false ) {
@@ -162,6 +162,7 @@ const sv = browser.fixtureCtx.sv;
         disabledAttibutes = allAttributes.filter( el => !enabledAttributes.includes( el ) );
     }
 
+
     async function updateAttributesState( attr ) {
         enabledAttributes = enabledAttributes.filter( element => pricingMatrix_td.possibleCheckboxAttributesCombinations[ attr ].includes( element ) );
         enabledAttributes.push( attr );
@@ -222,6 +223,11 @@ const sv = browser.fixtureCtx.sv;
                 continue attributeIterator;
             }
 
+            //Skip attribute if it is active
+            if ( activeAttributes.includes( attr ) ) {
+                continue attributeIterator;
+            }
+
             await browser.click( fa.checkboxAttribute( attr ) );
 
             await updateAttributesState( attr );
@@ -274,7 +280,7 @@ export async function checkCharlimits() {
 
             if ( attributes[ attr ] == null ) {
                 await browser
-                .expect( fa.textAttribute( 'Char limit' ).visible ).notOk( '"Char limit" is visible for the attribute ' + attr )
+                .expect( fa.textAttribute( 'Char limit' ).visible ).ok( '"Char limit" is not visible for the attribute ' + attr )
                 .expect( fa.textAttribute( 'Char limit' ).hasAttribute( 'disabled' ) ).ok( '"Char limit" is editable for the attribute ' + attr )
                 .expect( fa.textAttribute( 'Char limit' ).value ).eql( '',  '"Char limit" value is incorrect for the attribute ' + attr );
             } else {
